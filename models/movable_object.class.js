@@ -20,6 +20,8 @@ class MovableObject extends DrawableObject {
             if (this.isAboveGround(groundY) || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+            } else {
+                this.speedY = 0;
             }
         }, 1000 / 25)
     }
@@ -30,8 +32,18 @@ class MovableObject extends DrawableObject {
         } else {
             return this.y < groundY;
         }
-
     }
+
+    isFallingOn(enemy) {
+        let charBottom = this.y + this.height - this.offset.bottom;
+        let enemyTop = enemy.y + enemy.offset.top;
+
+        return (
+            this.speedY > 0 &&                 // fällt nach unten
+            charBottom <= enemyTop + 20         // kleine Toleranz       
+        );
+    }
+
 
     // character.isColliding(chicken);
     isColliding(mo) {

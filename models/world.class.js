@@ -32,10 +32,10 @@ class World {
     run() {
         setInterval(() => {
             this.checkCollisions();
-        }, 1000/60);
+        }, 1000 / 60);
         setInterval(() => {
             this.checkThrowObjects();
-        },200);
+        }, 200);
     }
 
     checkThrowObjects() {
@@ -47,15 +47,21 @@ class World {
         }
     }
 
+
+
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy)) {
-                this.character.hit();
-                this.statusBarHealth.setPercentage('HEALTH', this.character.energy);
-                console.log(this.character.energy);
+            if (this.character.isColliding(enemy) && this.character.speedY < 0) {
+                    enemy.dead = true;
+                    this.character.speedY = 10;
+                } else if (this.character.isColliding(enemy)){
+                    this.character.hit();
+                    this.statusBarHealth.setPercentage('HEALTH', this.character.energy);
+                }
+
             }
-        });
-        this.level.coins.forEach((coin) => {
+        );
+          this.level.coins.forEach((coin) => {
             if (this.character.isColliding(coin)) {
                 this.takedCoins += 20;
                 this.statusBarCoin.setPercentage('COIN', this.takedCoins);
@@ -71,6 +77,7 @@ class World {
         });
         this.level.coins = this.level.coins.filter(c => !c.isCollected);
         this.level.bottles = this.level.bottles.filter(b => !b.isCollected);
+        this.level.enemies = this.level.enemies.filter(e => !e.dead);
     }
 
 
