@@ -6,6 +6,8 @@ class DrawableObject {
     img;
     imageCache = {};
     currentImage = 0;
+    effectImage = 0;
+    
 
 
     loadImage(path) {
@@ -26,7 +28,7 @@ class DrawableObject {
     }
 
     drawCollisionFrame(ctx) {
-        if (this instanceof Endboss) {
+        if (this instanceof Endboss || this instanceof ThrowableObject) {
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'red';

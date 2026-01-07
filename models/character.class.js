@@ -12,6 +12,8 @@ class Character extends MovableObject {
         left: 20
     };
 
+
+
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -83,16 +85,17 @@ class Character extends MovableObject {
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround(this.groundY)) {
-                this.playAnimation(this.IMAGES_JUMPING);
+                this.resetOneWayAnimation();
+                this.playOneWayAnimation(this.IMAGES_JUMPING);
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
                 }
             }
-        }, 50);
+        }, 60);
 
     }
 
-    
+
 
 }

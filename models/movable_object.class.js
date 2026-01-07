@@ -12,8 +12,11 @@ class MovableObject extends DrawableObject {
         left: 0
     };
     energy = 100;
-
     lastHit = 0;
+    dead = false;
+
+lastEffectTime = 0;
+effectInterval = 150; // ms (für Jump perfekt)
 
     applyGravity(groundY) {
         setInterval(() => {
@@ -22,6 +25,7 @@ class MovableObject extends DrawableObject {
                 this.speedY -= this.acceleration;
             } else {
                 this.speedY = 0;
+                this.effectImage = 0;
             }
         }, 1000 / 25)
     }
@@ -97,15 +101,48 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
-    playOneWayAnimation(images) {
-        if (this.currentImage < images.length) {
-            let i = this.currentImage % images.length;
-            let path = images[i];
-            this.img = this.imageCache[path];
-            this.currentImage++;
-        }
+    // playOneWayAnimation(images,time) {
+    //     if (this.effectImage < images.length - 1) {
+    //         let i = this.effectImage;
+    //         let path = images[i];
+    //         this.img = this.imageCache[path];
+    //         setTimeout(() => {
+    //             this.effectImage++;
+    //         },time);
+            
 
+    //     } else {
+    //        let i = images.length -1;
+    //        let path = images[i];
+    //         this.img = this.imageCache[path];
+    //     }
+        
+    // }
+
+    playOneWayAnimation(images) {
+    const now = Date.now();
+
+    if (now - this.lastEffectTime < this.effectInterval) {
+        return;
     }
+
+    this.lastEffectTime = now;
+
+    if (this.effectImage < images.length - 1) {
+        const path = images[this.effectImage];
+        this.img = this.imageCache[path];
+        this.effectImage++;
+    } else {
+        const path = images[images.length - 1];
+        this.img = this.imageCache[path];
+    }
+}
+
+resetOneWayAnimation() {
+    this.effectImage = 0;
+    this.lastEffectTime = 0;
+}
+    
 
     jump() {
         this.speedY = 30;
