@@ -28,7 +28,7 @@ class DrawableObject {
     }
 
     drawCollisionFrame(ctx) {
-        if (this instanceof Endboss || this instanceof ThrowableObject) {
+        if (this instanceof Endboss || this instanceof ThrowableObject || this instanceof Chicken) {
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'red';
