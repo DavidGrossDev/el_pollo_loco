@@ -25,12 +25,21 @@ class StatusBar extends DrawableObject {
             'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/60.png',
             'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/80.png',
             'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/100.png'
+        ],
+        HEALTH_ENDBOSS: [
+            'img/7_statusbars/2_statusbar_endboss/orange/orange0.png',
+            'img/7_statusbars/2_statusbar_endboss/orange/orange20.png',
+            'img/7_statusbars/2_statusbar_endboss/orange/orange40.png',
+            'img/7_statusbars/2_statusbar_endboss/orange/orange60.png',
+            'img/7_statusbars/2_statusbar_endboss/orange/orange80.png',
+            'img/7_statusbars/2_statusbar_endboss/orange/orange100.png'
         ]
     };
     percentage = {
         HEALTH: 100,
         COIN: 0,
-        BOTTLE: 0
+        BOTTLE: 0,
+        HEALTH_ENDBOSS:100
     };
 
     initialPercentage;
@@ -40,11 +49,12 @@ class StatusBar extends DrawableObject {
         this.loadImages(this.IMAGES.HEALTH);
         this.loadImages(this.IMAGES.COIN);
         this.loadImages(this.IMAGES.BOTTLE);
+        this.loadImages(this.IMAGES.HEALTH_ENDBOSS);
         this.x = x;
         this.y = y;
         this.width = 200;
         this.height = 60;
-        if (arr == 'HEALTH') {
+        if (arr == 'HEALTH' || arr == 'HEALTH_ENDBOSS') {
             this.initialPercentage = 100;
         } else {
             this.initialPercentage = 0;
