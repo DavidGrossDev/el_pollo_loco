@@ -9,6 +9,7 @@ class World {
     statusBarHealth = new StatusBar('HEALTH', 30, 37);
     statusBarCoin = new StatusBar('COIN', 30, 80);
     statusBarBottle = new StatusBar('BOTTLE', 30, 0);
+    statusBarHealthEndboss = new StatusBar('HEALTH_ENDBOSS', 2500, 37);
     throwableObjects = [];
     coins = [];
     bottles = [];
@@ -36,6 +37,9 @@ class World {
         setInterval(() => {
             this.checkThrowObjects();
         }, 200);
+        setInterval(() => {
+            this.checkCollisionsWithBottles();
+        }, 100);
     }
 
     checkThrowObjects() {
@@ -47,24 +51,35 @@ class World {
         }
     }
 
+    checkCollisionsWithBottles() {
+        this.level.enemies.forEach((enemy) => {
+            if (this.throwableObjects.length > 0 && this.throwableObjects[0].isColliding(enemy) && enemy.energy > 0) {
+                this.throwableObjects[0].energy = 0;
+                this.resetThrowableObjects();
+                enemy.isHurt();
+                enemy.energy -= 100;
+                console.log(enemy.energy);
+                if (enemy instanceof Endboss) {
+                    this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy/8 )
+                }
+            } else if (this.throwableObjects.length > 0 && this.throwableObjects[0].y > 360) {
+                this.throwableObjects[0].energy = 0;
+                this.resetThrowableObjects();
+            }
+        })
+    }
+
 
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
 
             if (this.character.isColliding(enemy) && this.character.speedY < 0 && enemy.energy > 0) {
-                enemy.energy = 0;
+                enemy.energy -= 100;
                 this.character.speedY = 10;
             } else if (this.character.isColliding(enemy) && enemy.energy > 0) {
                 this.character.hit();
                 this.statusBarHealth.setPercentage('HEALTH', this.character.energy);
-            } else if (this.throwableObjects.length > 0 && this.throwableObjects[0].isColliding(enemy) && enemy.energy > 0) {
-                enemy.energy = 0;
-                this.throwableObjects[0].energy = 0;
-                this.resetThrowableObjects();
-            } else if (this.throwableObjects.length > 0 && this.throwableObjects[0].y > 360) {
-                this.throwableObjects[0].energy = 0;
-                this.resetThrowableObjects();
             }
 
 
@@ -87,7 +102,8 @@ class World {
 
         this.level.coins = this.level.coins.filter(c => !c.isCollected);
         this.level.bottles = this.level.bottles.filter(b => !b.isCollected);
-        this.level.enemies = this.level.enemies.filter(e => !(e.y > 480));
+        // this.throwableObjects = this.throwableObjects.filter(to => (to.energy == 100))
+        // this.level.enemies = this.level.enemies.filter(e => !(e.y > 480));
     }
 
     resetThrowableObjects() {
@@ -110,8 +126,9 @@ class World {
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
-        this.addToMap(this.character);
         this.addObjectsToMap(this.level.enemies);
+        this.addToMap(this.statusBarHealthEndboss);
+        this.addToMap(this.character);
         this.addObjectsToMap(this.throwableObjects);
 
         this.ctx.translate(-this.camera_x, 0);
