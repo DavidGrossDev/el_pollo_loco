@@ -51,20 +51,23 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && this.character.speedY < 0) {
-                enemy.dead = true;
+           
+                if (this.character.isColliding(enemy) && this.character.speedY < 0 && enemy.energy > 0) {
+                enemy.energy = 0;
                 this.character.speedY = 10;
-            } else if (this.character.isColliding(enemy)) {
+            } else if (this.character.isColliding(enemy) && enemy.energy > 0) {
                 this.character.hit();
                 this.statusBarHealth.setPercentage('HEALTH', this.character.energy);
-            } else if (this.throwableObjects.length > 0 && this.throwableObjects[0].isColliding(enemy)) {
-                enemy.dead = true;
+            } else if (this.throwableObjects.length > 0 && this.throwableObjects[0].isColliding(enemy) && enemy.energy > 0) {
+                enemy.energy = 0;
                 this.throwableObjects[0].energy = 0;
                 this.resetThrowableObjects();
             } else if (this.throwableObjects.length > 0 && this.throwableObjects[0].y > 360) {
                 this.throwableObjects[0].energy = 0;
                 this.resetThrowableObjects();
             }
+            
+            
         }
         );
         this.level.coins.forEach((coin) => {
@@ -84,7 +87,7 @@ class World {
 
         this.level.coins = this.level.coins.filter(c => !c.isCollected);
         this.level.bottles = this.level.bottles.filter(b => !b.isCollected);
-        this.level.enemies = this.level.enemies.filter(e => !e.dead);
+        this.level.enemies = this.level.enemies.filter(e => !(e.y > 480));
     }
 
     resetThrowableObjects() {
