@@ -85,8 +85,7 @@ class Character extends MovableObject {
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.isAboveGround(this.groundY)) {
-                this.resetOneWayAnimation();
-                this.playOneWayAnimation(this.IMAGES_JUMPING);
+                this.playAnimation(this.IMAGES_JUMPING);
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);

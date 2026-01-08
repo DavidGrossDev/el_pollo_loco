@@ -51,8 +51,8 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-           
-                if (this.character.isColliding(enemy) && this.character.speedY < 0 && enemy.energy > 0) {
+
+            if (this.character.isColliding(enemy) && this.character.speedY < 0 && enemy.energy > 0) {
                 enemy.energy = 0;
                 this.character.speedY = 10;
             } else if (this.character.isColliding(enemy) && enemy.energy > 0) {
@@ -66,8 +66,8 @@ class World {
                 this.throwableObjects[0].energy = 0;
                 this.resetThrowableObjects();
             }
-            
-            
+
+
         }
         );
         this.level.coins.forEach((coin) => {
