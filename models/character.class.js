@@ -15,7 +15,8 @@ class Character extends MovableObject {
     counter = 0;
     jumpImageCounter = 0;
     lastEffectTime = Date.now();
-    effectInterval =250;
+    effectInterval = 150;
+    enableMovement = true;
 
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -64,20 +65,26 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                this.moveRight();
-                this.otherDirection = false;
+            if (this.enableMovement) {
+                if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+                    this.moveRight();
+                    this.otherDirection = false;
+                }
+                if (this.world.keyboard.LEFT && this.x > 0) {
+                    this.moveLeft();
+                    this.otherDirection = true;
+                }
             }
-            if (this.world.keyboard.LEFT && this.x > 0) {
-                this.moveLeft();
-                this.otherDirection = true;
-            }
-
             if (this.world.keyboard.SPACE && !this.isAboveGround(this.groundY)) {
                 this.startJumping = true;
+                this.enableMovement =false;
+                setTimeout(() => {
+                    this.enableMovement = true;
+                },420);
+
             }
 
-        
+
 
 
             this.world.camera_x = -this.x + 120;
@@ -91,7 +98,6 @@ class Character extends MovableObject {
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.startJumping) {
-                // this.playAnimation(this.IMAGES_JUMPING);
                 this.playAnimationJumping(this.IMAGES_JUMPING);
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
@@ -104,9 +110,7 @@ class Character extends MovableObject {
 
 
     playAnimationJumping(images) {
-        // console.log(this.startJumping);
-
-        const now = Date.now();
+        let now = Date.now();
         if (now - this.lastEffectTime < this.effectInterval) return;
         this.lastEffectTime = now;
         if (this.jumpImageCounter < (images.length - 1)) {
@@ -125,28 +129,6 @@ class Character extends MovableObject {
             this.startJumping = false;
 
         }
-
-        // console.log(this.speedY);
-
-
-
-
-        // playAnimation(images) {
-        // let i = this.currentImage % images.length;
-        // let path = images[i];
-        // this.img = this.imageCache[path];
-        // this.currentImage++;
-
-
-
-
-
-        // console.log(this.startJumping);
-        // this.startJumping = false;
-
-
-
-
     }
 
 }
