@@ -11,8 +11,11 @@ class Character extends MovableObject {
         bottom: 10,
         left: 20
     };
-
-
+    startJumping = false;
+    counter = 0;
+    jumpImageCounter = 0;
+    lastEffectTime = Date.now();
+    effectInterval =250;
 
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -71,8 +74,11 @@ class Character extends MovableObject {
             }
 
             if (this.world.keyboard.SPACE && !this.isAboveGround(this.groundY)) {
-                this.jump();
+                this.startJumping = true;
             }
+
+        
+
 
             this.world.camera_x = -this.x + 120;
         }, 1000 / 60);
@@ -84,8 +90,9 @@ class Character extends MovableObject {
                 this.playAnimation(this.IMAGES_DYING);
             } else if (this.isHurt()) {
                 this.playAnimation(this.IMAGES_HURT);
-            } else if (this.isAboveGround(this.groundY)) {
-                this.playAnimation(this.IMAGES_JUMPING);
+            } else if (this.startJumping) {
+                // this.playAnimation(this.IMAGES_JUMPING);
+                this.playAnimationJumping(this.IMAGES_JUMPING);
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
@@ -96,5 +103,50 @@ class Character extends MovableObject {
     }
 
 
+    playAnimationJumping(images) {
+        // console.log(this.startJumping);
+
+        const now = Date.now();
+        if (now - this.lastEffectTime < this.effectInterval) return;
+        this.lastEffectTime = now;
+        if (this.jumpImageCounter < (images.length - 1)) {
+            if (this.jumpImageCounter == 3) {
+                this.jump();
+            }
+            let i = this.jumpImageCounter;
+            let path = images[i];
+            this.img = this.imageCache[path];
+            this.jumpImageCounter++;
+            console.log(this.jumpImageCounter);
+        }
+
+        if (this.jumpImageCounter == 8 && !this.isAboveGround(this.groundY)) {
+            this.jumpImageCounter = 0;
+            this.startJumping = false;
+
+        }
+
+        // console.log(this.speedY);
+
+
+
+
+        // playAnimation(images) {
+        // let i = this.currentImage % images.length;
+        // let path = images[i];
+        // this.img = this.imageCache[path];
+        // this.currentImage++;
+
+
+
+
+
+        // console.log(this.startJumping);
+        // this.startJumping = false;
+
+
+
+
+    }
 
 }

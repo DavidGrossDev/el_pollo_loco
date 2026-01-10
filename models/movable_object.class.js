@@ -98,24 +98,29 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
-    playOneWayAnimation(images,time) {
+    playOneWayAnimation(images, action) {
+        // console.log(this.effectImage);
+        
+        if(action =='characterJumping' && this.effectImage == 3) {
+            this.speedY = 25;
+        }
         if (this.effectImage < images.length - 1) {
+            
             let i = this.effectImage;
             let path = images[i];
             this.img = this.imageCache[path];
-            setTimeout(() => {
-                this.effectImage++;
-            },time);
-            
+            this.effectImage++;
+
+
 
         } else {
-           let i = images.length -1;
-           let path = images[i];
+            let i = images.length - 1;
+            let path = images[i];
             this.img = this.imageCache[path];
         }
-        
+
     }
-  
+
 
     jump() {
         this.speedY = 30;
