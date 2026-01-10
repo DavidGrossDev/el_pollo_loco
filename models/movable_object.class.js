@@ -4,7 +4,7 @@ class MovableObject extends DrawableObject {
     speed = 0.15;
     otherDirection = false;
     speedY = 0;
-    acceleration = 2.5;
+    acceleration = 5; //defaul 2.5
     offset = {
         top: 0,
         right: 0,
@@ -31,7 +31,7 @@ class MovableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-            return this.y < groundY;
+            return this.y < groundY ;
         }
     }
 
@@ -123,6 +123,6 @@ class MovableObject extends DrawableObject {
 
 
     jump() {
-        this.speedY = 30;
+        this.speedY = 35;
     }
 }
