@@ -80,7 +80,7 @@ class Character extends MovableObject {
                 this.enableMovement =false;
                 setTimeout(() => {
                     this.enableMovement = true;
-                },420);
+                },450);
 
             }
 
@@ -121,7 +121,6 @@ class Character extends MovableObject {
             let path = images[i];
             this.img = this.imageCache[path];
             this.jumpImageCounter++;
-            console.log(this.jumpImageCounter);
         }
 
         if (this.jumpImageCounter == 8 && !this.isAboveGround(this.groundY)) {
