@@ -2,13 +2,15 @@ class Endboss extends MovableObject {
     y = 140;
     height = 300;
     width = 300;
-    speed = 0.15;
+    speed = 1;
     offset = {
         top: 55,
         right: 30,
         bottom: 10,
         left: 25
     };
+    sawCharacter = false;
+    readyToAttack = false;
 
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -40,7 +42,14 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G24.png',
         'img/4_enemie_boss_chicken/5_dead/G25.png',
         'img/4_enemie_boss_chicken/5_dead/G26.png'
-    ]
+    ];
+    IMAGES_HURT = [
+        'img/4_enemie_boss_chicken/4_hurt/G21.png',
+        'img/4_enemie_boss_chicken/4_hurt/G22.png',
+        'img/4_enemie_boss_chicken/4_hurt/G23.png'
+    ];
+    world;
+    alertCounter = 0;
 
     constructor() {
         super().loadImage('img/4_enemie_boss_chicken/1_walk/G1.png');
@@ -48,6 +57,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ARLERT);
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_DEAD);
+        this.loadImages(this.IMAGES_HURT);
 
         this.x = 2500;
         this.energy = 800;
@@ -56,27 +66,61 @@ class Endboss extends MovableObject {
     }
 
     animate() {
+
         setInterval(() => {
-            this.moveLeft();
-           
+            if (this.inAlertRange()) {
+                this.sawCharacter = true;
+
+            }
+            if (this.inAttackRange()) {
+                this.readyToAttack = true;
+                console.log("Character in Attackrange", this.readyToAttack);
+            } else {
+                this.readyToAttack = false;
+            }
+        }, 200);
+
+
+        setInterval(() => {
+
+            //     this.moveLeft();
             if (this.isDead()) {
                 setInterval(() => {
                     this.playOneWayAnimation(this.IMAGES_DEAD);
                     this.y += 30;
                 }, 80);
-
-            } else {
+            } else if (this.isHurt()) {
+                this.playAnimation(this.IMAGES_HURT);
+            } else if (this.readyToAttack) {
                 this.playAnimation(this.IMAGES_ATTACK);
+                this.moveLeft();
+                this.speed = 0.15;
+            } else if (this.sawCharacter) {
+                if(this.alertCounter < this.IMAGES_ARLERT.length-1) {
+                    this.playAnimation(this.IMAGES_ARLERT);
+                    this.alertCounter++;
+                } else {
+                    this.moveLeft();
+                    this.speed = 1;
+                    this.playAnimation(this.IMAGES_WALKING);
+                }
+                
+
+
+                // this.playAnimation(this.IMAGES_WALKING);
             }
         }, 200);
     }
 
-    //  'img/4_enemie_boss_chicken/2_alert/G5.png',
-    //     'img/4_enemie_boss_chicken/2_alert/G6.png',
-    //     'img/4_enemie_boss_chicken/2_alert/G7.png',
-    //     'img/4_enemie_boss_chicken/2_alert/G8.png',
-    //     'img/4_enemie_boss_chicken/2_alert/G9.png',
-    //     'img/4_enemie_boss_chicken/2_alert/G10.png',
-    //     'img/4_enemie_boss_chicken/2_alert/G11.png',
-    //     'img/4_enemie_boss_chicken/2_alert/G12.png'
+    inAlertRange() {
+        return this.x - this.world.character.x < 300 && this.x - this.world.character.x > 250;
+    }
+
+    inAttackRange() {
+        let endbossX = this.x + this.offset.left;
+        let characterX = this.world.character.x + this.world.character.width - (this.world.character.offset.left + this.world.character.offset.right);
+        return endbossX - characterX < 21;
+    }
+
+
 }
