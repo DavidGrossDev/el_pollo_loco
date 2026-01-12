@@ -9,7 +9,7 @@ class World {
     statusBarHealth = new StatusBar('HEALTH', 30, 37);
     statusBarCoin = new StatusBar('COIN', 30, 80);
     statusBarBottle = new StatusBar('BOTTLE', 30, 0);
-    statusBarHealthEndboss = new StatusBar('HEALTH_ENDBOSS', 2500, 37);
+    statusBarHealthEndboss = new StatusBar('HEALTH_ENDBOSS', 490, 10);
     throwableObjects = [];
     coins = [];
     bottles = [];
@@ -28,6 +28,7 @@ class World {
 
     setWorld() {
         this.character.world = this;
+        this.level.enemies[this.level.enemies.length-1].world = this; 
     }
 
     run() {
@@ -56,10 +57,10 @@ class World {
             if (this.throwableObjects.length > 0 && this.throwableObjects[0].isColliding(enemy) && enemy.energy > 0) {
                 this.throwableObjects[0].energy = 0;
                 this.resetThrowableObjects();
-                enemy.isHurt();
                 enemy.energy -= 100;
                 console.log(enemy.energy);
                 if (enemy instanceof Endboss) {
+                    enemy.lastHit = new Date().getTime();
                     this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy/8 )
                 }
             } else if (this.throwableObjects.length > 0 && this.throwableObjects[0].y > 360) {
@@ -123,11 +124,13 @@ class World {
         this.addToMap(this.statusBarHealth);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarBottle);
+        this.showEndbossHealthbar();
+        
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
         this.addObjectsToMap(this.level.enemies);
-        this.addToMap(this.statusBarHealthEndboss);
+        
         this.addToMap(this.character);
         this.addObjectsToMap(this.throwableObjects);
 
@@ -155,6 +158,12 @@ class World {
         // mo.drawCollisionFrame(this.ctx);
         if (mo.otherDirection) {
             this.flipImageBack(mo);
+        }
+    }
+
+    showEndbossHealthbar() {
+        if(this.level.enemies[this.level.enemies.length-1].x -this.character.x  < 580) {
+            this.addToMap(this.statusBarHealthEndboss);
         }
     }
 
