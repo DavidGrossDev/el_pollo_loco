@@ -74,7 +74,6 @@ class Endboss extends MovableObject {
             }
             if (this.inAttackRange()) {
                 this.readyToAttack = true;
-                console.log("Character in Attackrange", this.readyToAttack);
             } else {
                 this.readyToAttack = false;
             }
@@ -93,27 +92,24 @@ class Endboss extends MovableObject {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.readyToAttack) {
                 this.playAnimation(this.IMAGES_ATTACK);
-                this.moveLeft();
                 this.speed = 0.15;
+                this.moveLeft();
             } else if (this.sawCharacter) {
                 if(this.alertCounter < this.IMAGES_ARLERT.length-1) {
                     this.playAnimation(this.IMAGES_ARLERT);
                     this.alertCounter++;
                 } else {
-                    this.moveLeft();
                     this.speed = 1;
+                    this.moveLeft();
                     this.playAnimation(this.IMAGES_WALKING);
                 }
-                
 
-
-                // this.playAnimation(this.IMAGES_WALKING);
             }
         }, 200);
     }
 
     inAlertRange() {
-        return this.x - this.world.character.x < 300 && this.x - this.world.character.x > 250;
+        return this.x - this.world.character.x < 300 ; // && this.x - this.world.character.x > 200
     }
 
     inAttackRange() {

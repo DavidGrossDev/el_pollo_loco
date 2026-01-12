@@ -2,6 +2,7 @@ class World {
     character = new Character();
 
     level = level1;
+    endscreen = new Endscreen();
     canvas;
     keyboard;
     ctx;
@@ -125,7 +126,6 @@ class World {
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarBottle);
         this.showEndbossHealthbar();
-        
         this.ctx.translate(this.camera_x, 0);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.level.bottles);
@@ -135,6 +135,7 @@ class World {
         this.addObjectsToMap(this.throwableObjects);
 
         this.ctx.translate(-this.camera_x, 0);
+        this.checkCharacterHealtBar();
 
 
         let self = this;
@@ -164,6 +165,12 @@ class World {
     showEndbossHealthbar() {
         if(this.level.enemies[this.level.enemies.length-1].x -this.character.x  < 580) {
             this.addToMap(this.statusBarHealthEndboss);
+        }
+    }
+
+    checkCharacterHealtBar() {
+        if(this.character.energy <= 0) {
+            this.addToMap(this.endscreen);
         }
     }
 
