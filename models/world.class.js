@@ -1,8 +1,11 @@
 class World {
     character = new Character();
 
+    startCounter = 0;
+    gameOver = false;
     level = level1;
-    endscreen = new Endscreen();
+    startScreen = new Screen('START');
+    endScreen = new Screen('END');
     canvas;
     keyboard;
     ctx;
@@ -16,6 +19,9 @@ class World {
     bottles = [];
     takedCoins = 0;
     lootedBottle = 0;
+    collisionBody;
+    throwBottle;
+    collisionBottle;
 
 
     constructor(canvas, keyboard) {
@@ -29,19 +35,27 @@ class World {
 
     setWorld() {
         this.character.world = this;
-        this.level.enemies[this.level.enemies.length-1].world = this; 
+        this.level.enemies[this.level.enemies.length - 1].world = this;
     }
 
     run() {
-        setInterval(() => {
+        this.collisionBody = setInterval(() => {
             this.checkCollisions();
         }, 1000 / 60);
-        setInterval(() => {
+
+        this.throwBottle = setInterval(() => {
             this.checkThrowObjects();
         }, 200);
-        setInterval(() => {
+
+        this.collisionBottle = setInterval(() => {
             this.checkCollisionsWithBottles();
         }, 100);
+    }
+
+    stopAllCheckCollisions() {
+        clearInterval(this.collisionBody);
+        clearInterval(this.throwBottle);
+        clearInterval(this.collisionBottle);
     }
 
     checkThrowObjects() {
@@ -62,7 +76,7 @@ class World {
                 console.log(enemy.energy);
                 if (enemy instanceof Endboss) {
                     enemy.lastHit = new Date().getTime();
-                    this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy/8 )
+                    this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy / 8)
                 }
             } else if (this.throwableObjects.length > 0 && this.throwableObjects[0].y > 360) {
                 this.throwableObjects[0].energy = 0;
@@ -116,28 +130,30 @@ class World {
 
 
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.backgroundObjects);
-        this.addObjectsToMap(this.level.clouds);
-        this.ctx.translate(-this.camera_x, 0);
-        this.addToMap(this.statusBarHealth);
-        this.addToMap(this.statusBarCoin);
-        this.addToMap(this.statusBarBottle);
-        this.showEndbossHealthbar();
-        this.ctx.translate(this.camera_x, 0);
-        this.addObjectsToMap(this.level.coins);
-        this.addObjectsToMap(this.level.bottles);
-        this.addObjectsToMap(this.level.enemies);
-        
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.throwableObjects);
-
-        this.ctx.translate(-this.camera_x, 0);
-        this.checkCharacterHealtBar();
-
-
+        if (this.firstStart()) {
+            this.showStartScreen();
+            setTimeout(() => {
+                this.startCounter++;
+            }, 3000);
+        } else {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.translate(this.camera_x, 0);
+            this.addObjectsToMap(this.level.backgroundObjects);
+            this.addObjectsToMap(this.level.clouds);
+            this.ctx.translate(-this.camera_x, 0);
+            this.addToMap(this.statusBarHealth);
+            this.addToMap(this.statusBarCoin);
+            this.addToMap(this.statusBarBottle);
+            this.showEndbossHealthbar();
+            this.ctx.translate(this.camera_x, 0);
+            this.addObjectsToMap(this.level.coins);
+            this.addObjectsToMap(this.level.bottles);
+            this.addObjectsToMap(this.level.enemies);
+            this.addToMap(this.character);
+            this.addObjectsToMap(this.throwableObjects);
+            this.ctx.translate(-this.camera_x, 0);
+            this.checkCharacterHealtBar();
+        }
         let self = this;
         requestAnimationFrame(function () {
             self.draw();
@@ -162,15 +178,24 @@ class World {
         }
     }
 
+    firstStart() {
+        return this.startCounter == 0;
+    }
+
+    showStartScreen() {
+        this.addToMap(this.startScreen);
+    }
+
     showEndbossHealthbar() {
-        if(this.level.enemies[this.level.enemies.length-1].x -this.character.x  < 580) {
+        if (this.level.enemies[this.level.enemies.length - 1].x - this.character.x < 580) {
             this.addToMap(this.statusBarHealthEndboss);
         }
     }
 
     checkCharacterHealtBar() {
-        if(this.character.energy <= 0) {
-            this.addToMap(this.endscreen);
+        if (this.character.energy <= 0) {
+            this.addToMap(this.endScreen);
+            this.stopAllCheckCollisions();
         }
     }
 
