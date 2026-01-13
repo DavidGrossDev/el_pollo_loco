@@ -96,7 +96,7 @@ class Character extends MovableObject {
 
             if (this.isDead()) {
                 this.playAnimationJumping(this.IMAGES_DYING);
-            } else if (this.isHurt()) {
+            } else if (this.isHurt(0.2)) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.startJumping) {
                 this.playAnimationJumping(this.IMAGES_JUMPING);

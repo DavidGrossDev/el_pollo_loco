@@ -88,14 +88,14 @@ class Endboss extends MovableObject {
                     this.playOneWayAnimation(this.IMAGES_DEAD);
                     this.y += 30;
                 }, 80);
-            } else if (this.isHurt()) {
+            } else if (this.isHurt(1)) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.readyToAttack) {
                 this.playAnimation(this.IMAGES_ATTACK);
                 this.speed = 0.15;
                 this.moveLeft();
             } else if (this.sawCharacter) {
-                if(this.alertCounter < this.IMAGES_ARLERT.length-1) {
+                if (this.alertCounter < this.IMAGES_ARLERT.length - 1) {
                     this.playAnimation(this.IMAGES_ARLERT);
                     this.alertCounter++;
                 } else {
@@ -109,7 +109,7 @@ class Endboss extends MovableObject {
     }
 
     inAlertRange() {
-        return this.x - this.world.character.x < 300 ; // && this.x - this.world.character.x > 200
+        return this.x - this.world.character.x < 300; // && this.x - this.world.character.x > 200
     }
 
     inAttackRange() {
