@@ -1,5 +1,5 @@
 class Coin extends CollectaleObject {
-    
+
     IMAGES_GLOWING = [
         'img/8_coin/coin_1.png',
         'img/8_coin/coin_2.png'
@@ -11,19 +11,19 @@ class Coin extends CollectaleObject {
         left: 45
     };
 
-    constructor() {
+    constructor(x, y) {
         super().loadImage('img/8_coin/coin_1.png');
         this.loadImages(this.IMAGES_GLOWING);
         this.width = 120;
         this.height = 120;
-        this.x = 200 + (Math.random() * 1800);
-        this.y = 200 + (Math.random() * 120);
+        this.x = x; 
+        this.y = y;  
         this.animate();
     }
 
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_GLOWING);
-        },250);
+        }, 250);
     }
 }
