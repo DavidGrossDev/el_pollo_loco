@@ -5,7 +5,8 @@ class World {
     gameOver = false;
     level = level1;
     startScreen = new Screen('START');
-    endScreen = new Screen('END');
+    endWinScreen = new Screen('END_WIN');
+    endLostScreen = new Screen('END_LOST');
     canvas;
     keyboard;
     ctx;
@@ -73,7 +74,6 @@ class World {
                 this.throwableObjects[0].energy = 0;
                 this.resetThrowableObjects();
                 enemy.energy -= 100;
-                console.log(enemy.energy);
                 if (enemy instanceof Endboss) {
                     enemy.lastHit = new Date().getTime();
                     this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy / 8)
@@ -134,7 +134,7 @@ class World {
             this.showStartScreen();
             setTimeout(() => {
                 this.startCounter++;
-            }, 3000);
+            }, 2000);
         } else {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.translate(this.camera_x, 0);
@@ -152,7 +152,7 @@ class World {
             this.addToMap(this.character);
             this.addObjectsToMap(this.throwableObjects);
             this.ctx.translate(-this.camera_x, 0);
-            this.checkCharacterHealtBar();
+            this.checkEndConditions();
         }
         let self = this;
         requestAnimationFrame(function () {
@@ -187,16 +187,25 @@ class World {
     }
 
     showEndbossHealthbar() {
-        if (this.level.enemies[this.level.enemies.length - 1].x - this.character.x < 580) {
+        let levelEndboss = this.level.enemies[this.level.enemies.length - 1];
+        if (levelEndboss.x - this.character.x < 580 && levelEndboss.energy > 0) {
             this.addToMap(this.statusBarHealthEndboss);
         }
     }
 
-    checkCharacterHealtBar() {
+    checkEndConditions() {
         if (this.character.energy <= 0) {
-            this.addToMap(this.endScreen);
+            this.addToMap(this.endLostScreen);
+            this.stopAllCheckCollisions();
+        } else if (this.checkEndbossDead()) {
+            this.addToMap(this.endWinScreen);
             this.stopAllCheckCollisions();
         }
+    }
+
+    checkEndbossDead() {
+        let levelEndboss = this.level.enemies[this.level.enemies.length - 1]
+        return levelEndboss.energy == 0;
     }
 
     flipImage(mo) {
