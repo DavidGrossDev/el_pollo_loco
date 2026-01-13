@@ -17,8 +17,6 @@ class Character extends MovableObject {
     lastEffectTime = Date.now();
     effectInterval = 150;
     enableMovement = true;
-
-
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -84,16 +82,9 @@ class Character extends MovableObject {
                 },450);
 
             }
-
-
-
-
             this.world.camera_x = -this.x + 120;
         }, 1000 / 60);
-
-
         setInterval(() => {
-
             if (this.isDead()) {
                 this.playAnimationJumping(this.IMAGES_DYING);
             } else if (this.isHurt(0.2)) {
@@ -123,11 +114,11 @@ class Character extends MovableObject {
             this.img = this.imageCache[path];
             this.jumpImageCounter++;
         }
-
         if (this.jumpImageCounter == 8 && !this.isAboveGround(this.groundY)) {
             this.jumpImageCounter = 0;
             this.startJumping = false;
-
+            console.log('erfolg');
+            
         }
     }
 
