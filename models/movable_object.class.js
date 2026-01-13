@@ -31,7 +31,7 @@ class MovableObject extends DrawableObject {
         if (this instanceof ThrowableObject) {
             return true;
         } else {
-            return this.y < groundY ;
+            return this.y < groundY;
         }
     }
 
@@ -63,10 +63,10 @@ class MovableObject extends DrawableObject {
         }
     }
 
-    isHurt() {
+    isHurt(time) {
         let timePassed = new Date().getTime() - this.lastHit;
         timePassed = timePassed / 1000;
-        return timePassed < 0.2;
+        return timePassed < time;
     }
 
     isDead() {
@@ -98,21 +98,12 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
-    playOneWayAnimation(images, action) {
-        // console.log(this.effectImage);
-        
-        if(action =='characterJumping' && this.effectImage == 3) {
-            this.speedY = 25;
-        }
+    playOneWayAnimation(images) {
         if (this.effectImage < images.length - 1) {
-            
             let i = this.effectImage;
             let path = images[i];
             this.img = this.imageCache[path];
             this.effectImage++;
-
-
-
         } else {
             let i = images.length - 1;
             let path = images[i];
