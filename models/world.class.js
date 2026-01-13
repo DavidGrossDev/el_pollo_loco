@@ -62,7 +62,7 @@ class World {
     checkThrowObjects() {
         if (this.keyboard.G && this.lootedBottle > 0) {
             let bottle = new ThrowableObject(this.character.x + this.character.width - 50, this.character.y + (this.character.height / 2) - 30);
-            this.lootedBottle -= 20;
+            this.lootedBottle -= 17;
             this.statusBarBottle.setPercentage('BOTTLE', this.lootedBottle);
             this.throwableObjects.push(bottle);
         }
@@ -89,28 +89,25 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
-
             if (this.character.isColliding(enemy) && this.character.speedY < 0 && enemy.energy > 0) {
                 enemy.energy -= 100;
                 this.character.speedY = 10;
-            } else if (this.character.isColliding(enemy) && enemy.energy > 0) {
+            } else if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.startJumping) {
                 this.character.hit();
                 this.statusBarHealth.setPercentage('HEALTH', this.character.energy);
             }
-
-
         }
         );
         this.level.coins.forEach((coin) => {
             if (this.character.isColliding(coin)) {
-                this.takedCoins += 20;
+                this.takedCoins += 5.3;          //100% = 19 Coins
                 this.statusBarCoin.setPercentage('COIN', this.takedCoins);
                 coin.isCollected = true;
             }
         });
         this.level.bottles.forEach((bottle) => {
             if (this.character.isColliding(bottle)) {
-                this.lootedBottle += 20;
+                this.lootedBottle += 17;
                 this.statusBarBottle.setPercentage('BOTTLE', this.lootedBottle);
                 bottle.isCollected = true;
             }
@@ -118,8 +115,6 @@ class World {
 
         this.level.coins = this.level.coins.filter(c => !c.isCollected);
         this.level.bottles = this.level.bottles.filter(b => !b.isCollected);
-        // this.throwableObjects = this.throwableObjects.filter(to => (to.energy == 100))
-        // this.level.enemies = this.level.enemies.filter(e => !(e.y > 480));
     }
 
     resetThrowableObjects() {
