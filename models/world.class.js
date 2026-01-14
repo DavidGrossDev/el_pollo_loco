@@ -1,6 +1,5 @@
 class World {
     character = new Character();
-
     startCounter = 0;
     gameOver = false;
     level = level1;
@@ -23,7 +22,6 @@ class World {
     collisionBody;
     throwBottle;
     collisionBottle;
-
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -85,8 +83,6 @@ class World {
         })
     }
 
-
-
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && this.character.speedY < 0 && enemy.energy > 0) {
@@ -100,7 +96,7 @@ class World {
         );
         this.level.coins.forEach((coin) => {
             if (this.character.isColliding(coin)) {
-                this.takedCoins += 5.3;          //100% = 19 Coins
+                this.takedCoins += 5.3;
                 this.statusBarCoin.setPercentage('COIN', this.takedCoins);
                 coin.isCollected = true;
             }
@@ -122,7 +118,6 @@ class World {
             this.throwableObjects = [];
         }, 180);
     }
-
 
     draw() {
         if (this.firstStart()) {

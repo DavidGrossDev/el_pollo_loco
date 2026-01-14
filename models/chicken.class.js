@@ -40,14 +40,13 @@ class Chicken extends MovableObject {
                 bottom: 7,
                 left: 8
             };
-        } 
-        
-        this.x = 200 + (Math.random() * 2000);
+        }
+
+        this.x = 250 + (Math.random() * 2000);
         this.speed = 0.15 + Math.random() * 0.25;
         setTimeout(() => {
             this.animate(arr);
         },2000);
-        
     }
 
     animate(arr) {

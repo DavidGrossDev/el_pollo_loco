@@ -11,7 +11,8 @@ class Endboss extends MovableObject {
     };
     sawCharacter = false;
     readyToAttack = false;
-
+    world;
+    alertCounter = 0;
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -48,9 +49,7 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/4_hurt/G22.png',
         'img/4_enemie_boss_chicken/4_hurt/G23.png'
     ];
-    world;
-    alertCounter = 0;
-
+    
     constructor() {
         super().loadImage('img/4_enemie_boss_chicken/1_walk/G1.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -70,7 +69,6 @@ class Endboss extends MovableObject {
         setInterval(() => {
             if (this.inAlertRange()) {
                 this.sawCharacter = true;
-
             }
             if (this.inAttackRange()) {
                 this.readyToAttack = true;
@@ -109,7 +107,7 @@ class Endboss extends MovableObject {
     }
 
     inAlertRange() {
-        return this.x - this.world.character.x < 300; // && this.x - this.world.character.x > 200
+        return this.x - this.world.character.x < 300; 
     }
 
     inAttackRange() {
