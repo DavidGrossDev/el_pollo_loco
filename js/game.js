@@ -1,6 +1,12 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let backgroundMusic = new Audio('./sounds/cowbell-for-songs-phonk-217006.mp3');
+backgroundMusic.playbackRate = 1.2;
+backgroundMusic.volume = 0.02;
+backgroundMusic.loop = true;
+backgroundMusic.play();
+
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -14,10 +20,12 @@ function init() {
 window.addEventListener('keydown', (ev) => {
     if(ev.keyCode == 39) {
         keyboard.RIGHT = true;
+        
     }
 
     if(ev.keyCode == 37) {
         keyboard.LEFT = true;
+        
     }
 
     if(ev.keyCode == 38) {
@@ -30,6 +38,7 @@ window.addEventListener('keydown', (ev) => {
 
     if(ev.keyCode == 32) {
         keyboard.SPACE = true;
+        
     }
     
     if(ev.keyCode == 71) {
@@ -40,10 +49,12 @@ window.addEventListener('keydown', (ev) => {
 window.addEventListener('keyup', (ev) => {
     if(ev.keyCode == 39) {
         keyboard.RIGHT = false;
+        
     }
 
     if(ev.keyCode == 37) {
         keyboard.LEFT = false;
+        
     }
 
     if(ev.keyCode == 38) {
@@ -62,3 +73,5 @@ window.addEventListener('keyup', (ev) => {
         keyboard.G = false;
     }
 });
+
+initLevel();

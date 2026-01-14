@@ -51,15 +51,26 @@ class Character extends MovableObject {
         'img/2_character_pepe/4_hurt/H-43.png'
     ]
     world;
+    walkingAudio = new Audio('./sounds/charFootsteps.mp3');
+    jumpAudio = new Audio('./sounds/charjump.mp3');
+    
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
+        this.soundSettings();
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DYING);
         this.loadImages(this.IMAGES_HURT);
         this.applyGravity(this.groundY);
         this.animate();
+    }
+
+    soundSettings() {
+        this.walkingAudio.playbackRate = 3.0;
+        this.walkingAudio.volume = 0.2;
+        this.jumpAudio.playbackRate = 2.0;
+        this.jumpAudio.volume = 0.2;
     }
 
     animate() {
@@ -76,10 +87,10 @@ class Character extends MovableObject {
             }
             if (this.world.keyboard.SPACE && !this.isAboveGround(this.groundY)) {
                 this.startJumping = true;
-                this.enableMovement =false;
+                this.enableMovement = false;
                 setTimeout(() => {
                     this.enableMovement = true;
-                },450);
+                }, 450);
 
             }
             this.world.camera_x = -this.x + 120;
@@ -94,6 +105,7 @@ class Character extends MovableObject {
             } else {
                 if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
                     this.playAnimation(this.IMAGES_WALKING);
+                    this.walkingAudio.play();
                 }
             }
         }, 60);
@@ -118,7 +130,7 @@ class Character extends MovableObject {
             this.jumpImageCounter = 0;
             this.startJumping = false;
             console.log('erfolg');
-            
+
         }
     }
 
