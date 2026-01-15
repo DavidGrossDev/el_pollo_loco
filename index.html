@@ -32,6 +32,24 @@
 
 <body onload="init()">
 
+    <div class="overlay">
+        <div class="overlayTemplate">
+            <button id="start_btn" class="startbtn" onclick="startGame()">Start Game</button>
+         <div class="controlbar">
+            <div>
+                <button id="btn_left"><img src="./img/arrows/arrow_left.png" alt=""></button>
+                <button id="btn_right"><img src="./img/arrows/arrow_right.png" alt=""></button>
+            </div>
+            <div>
+                <button id="btn_jump"><img src="./img/arrows/arrow_jump.png" alt=""></button>
+                <button id="btn_throw"><img class="throwimg" src="./img/arrows/arrow_throw.png" alt=""></button>
+            </div>
+            
+        </div>
+        </div>
+        
+    </div>
+
     <h1>El pollo loco</h1>
 
     <canvas id="canvas" width="720px" height="480px">

@@ -1,11 +1,11 @@
 * {
     margin: 0;
-}
-
-body {
     font-family: "Rubik Storm", system-ui;
     font-weight: 400;
     font-style: normal;
+}
+
+body {
     height: 100vh;
     width: 100%;
     display: flex;
@@ -13,6 +13,89 @@ body {
     align-items: center;
     background-image: url('img/5_background/desert.jpg');
     background-position: center;
+}
+
+.overlay {
+    z-index: 1;
+    margin-top: 78px;
+    height: 480px;
+    width: 720px;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.overlayTemplate {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.startbtn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    height: 25px;
+    width: 110px;
+    background-color: blue;
+    border-width: 0;
+    color: #FFFFFF;
+    transition: width 0.125s ease-in-out;
+}
+
+.startbtn:hover {
+    width: 140px;
+}
+
+.startbtn:active {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.controlbar {
+    position: absolute;
+    bottom: 0;
+    height: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.controlbar>div {
+    display: flex;
+    gap: 16px;
+}
+
+.controlbar>div:first-child {
+    padding-left: 30px;
+}
+
+.controlbar>div:last-child {
+    padding-right: 30px;
+}
+
+.controlbar>div>button {
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.controlbar>div>button>img {
+    height: 30px;
+    width: 30px;
+}
+
+.throwimg {
+    transform: rotate(-40deg);
 }
 
 h1 {
@@ -25,20 +108,39 @@ canvas {
     display: block;
 }
 
+.d_none {
+    display: none;
+}
+
 @media only screen and (max-width: 720px) {
+
     canvas {
+        width: 100%;
+    }
+
+    .overlay {
         width: 100%;
     }
 }
 
-@media only screen and (max-height: 558px) {  
+@media only screen and (max-height: 558px) {
+
     h1 {
         display: none;
+    }
+
+    .overlay {
+        margin: 0;
     }
 }
 
 @media only screen and (max-height: 480px) {
+
     canvas {
         height: 100vh;
+    }
+
+    .overlay {
+        height: 100%;
     }
 }
