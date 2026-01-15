@@ -1,3 +1,3 @@
-class CollectaleObject extends MovableObject {
+class CollectableObject extends MovableObject {
     isCollected = false;
 }

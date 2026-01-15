@@ -1,4 +1,4 @@
-class Coin extends CollectaleObject {
+class Coin extends CollectableObject {
 
     IMAGES_GLOWING = [
         'img/8_coin/coin_1.png',
