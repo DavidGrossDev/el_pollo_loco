@@ -1,4 +1,4 @@
-class Bottle extends CollectaleObject {
+class Bottle extends CollectableObject {
 
 
     constructor() {
