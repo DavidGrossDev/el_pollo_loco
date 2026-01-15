@@ -50,9 +50,11 @@ class Chicken extends MovableObject {
     }
 
     animate(arr) {
-
+        
         let setMoveLeft = setInterval(() => {
-            this.moveLeft();
+            if(this.world.startBtnIsPressed) {
+                this.moveLeft();
+            }  
         }, 1000 / 60);
         setInterval(() => {
             if (this.isDead()) {

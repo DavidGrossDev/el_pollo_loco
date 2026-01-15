@@ -75,7 +75,7 @@ class Character extends MovableObject {
 
     animate() {
         setInterval(() => {
-            if (this.enableMovement) {
+            if (this.enableMovement && this.world.startBtnIsPressed) {
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                     this.moveRight();
                     this.otherDirection = false;
@@ -85,7 +85,7 @@ class Character extends MovableObject {
                     this.otherDirection = true;
                 }
             }
-            if (this.world.keyboard.SPACE && !this.isAboveGround(this.groundY)) {
+            if (this.world.keyboard.SPACE && !this.isAboveGround(this.groundY) && this.world.startBtnIsPressed) {
                 this.startJumping = true;
                 this.enableMovement = false;
                 setTimeout(() => {
@@ -103,7 +103,7 @@ class Character extends MovableObject {
             } else if (this.startJumping) {
                 this.playAnimationJumping(this.IMAGES_JUMPING);
             } else {
-                if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.startBtnIsPressed) {
                     this.playAnimation(this.IMAGES_WALKING);
                     this.walkingAudio.play();
                 }

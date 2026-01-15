@@ -1,6 +1,5 @@
 class World {
     character = new Character();
-    startCounter = 0;
     gameOver = false;
     level = level1;
     startScreen = new Screen('START');
@@ -22,6 +21,8 @@ class World {
     collisionBody;
     throwBottle;
     collisionBottle;
+    startBtnIsPressed = false;
+    time = new Date().getTime();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -34,7 +35,9 @@ class World {
 
     setWorld() {
         this.character.world = this;
-        this.level.enemies[this.level.enemies.length - 1].world = this;
+        this.level.enemies.forEach((enemy) => {
+            enemy.world = this;
+        })
     }
 
     run() {
@@ -58,12 +61,19 @@ class World {
     }
 
     checkThrowObjects() {
-        if (this.keyboard.G && this.lootedBottle > 0) {
+        if (this.keyboard.G && this.lootedBottle > 0 && !this.checkTimeBetweenThrows()) {
             let bottle = new ThrowableObject(this.character.x + this.character.width - 50, this.character.y + (this.character.height / 2) - 30);
             this.lootedBottle -= 17;
             this.statusBarBottle.setPercentage('BOTTLE', this.lootedBottle);
             this.throwableObjects.push(bottle);
+            this.time = new Date().getTime();
         }
+    }
+
+    checkTimeBetweenThrows() {
+        let timePassed = new Date().getTime() - this.time;
+        timePassed = timePassed / 1000;
+        return timePassed < 1;
     }
 
     checkCollisionsWithBottles() {
@@ -120,11 +130,9 @@ class World {
     }
 
     draw() {
-        if (this.firstStart()) {
+        if (!this.startBtnIsPressed) {
             this.showStartScreen();
-            setTimeout(() => {
-                this.startCounter++;
-            }, 2000);
+            
         } else {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.translate(this.camera_x, 0);
@@ -166,10 +174,6 @@ class World {
         if (mo.otherDirection) {
             this.flipImageBack(mo);
         }
-    }
-
-    firstStart() {
-        return this.startCounter == 0;
     }
 
     showStartScreen() {
