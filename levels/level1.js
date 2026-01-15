@@ -1,13 +1,11 @@
-let level1
-function initLevel() {
-    level1 = new Level(
+let level1 = new Level(
         [
-            new Chicken('normal'),
-            new Chicken('normal'),
-            new Chicken('normal'),
-            new Chicken('small'),
-            new Chicken('small'),
-            new Chicken('small'),
+            // new Chicken('normal'),
+            // new Chicken('normal'),
+            // new Chicken('normal'),
+            // new Chicken('small'),
+            // new Chicken('small'),
+            // new Chicken('small'),
             new Endboss()
         ],
         [
@@ -71,4 +69,3 @@ function initLevel() {
             new Bottle()
         ]
     );
-}
