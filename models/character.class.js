@@ -10,14 +10,7 @@ class Character extends MovableObject {
         right: 30,
         bottom: 10,
         left: 20
-    };
-    startJumping = false;
-    counter = 0;
-    jumpImageCounter = 0;
-    lastEffectTime = Date.now();
-    effectInterval = 150;
-    enableMovement = true;
-    lastMove = new Date().getTime();
+    };   
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -78,10 +71,7 @@ class Character extends MovableObject {
     world;
     walkingAudio = new Audio('./sounds/charFootsteps.mp3');
     jumpAudio = new Audio('./sounds/charjump.mp3');
-
-    idleCounter = 0;
-    gotToLongIdle = false;
-
+    
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.soundSettings();
@@ -126,18 +116,19 @@ class Character extends MovableObject {
             }
             this.world.camera_x = -this.x + 120;
         }, 1000 / 60);
+        
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimationJumping(this.IMAGES_DYING);
             } else if (this.checkLastMovement()) {
                 if (this.gotToLongIdle) {
-                    this.playAnimationOnce(this.IMAGES_LONGIDLE);
+                    this.playAnimationOnce(this.IMAGES_LONGIDLE, "idle");
                 }
-                this.playAnimationOnce(this.IMAGES_IDLE);
+                this.playAnimationOnce(this.IMAGES_IDLE, "idle");
             } else if (this.isHurt(0.2)) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.startJumping) {
-                this.playAnimationJumping(this.IMAGES_JUMPING);
+                this.playAnimationOnce(this.IMAGES_JUMPING, "jump");
             } else {
                 if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.startBtnIsPressed) {
                     this.playAnimation(this.IMAGES_WALKING);
@@ -146,54 +137,6 @@ class Character extends MovableObject {
             }
         }, 60);
 
-    }
-
-    setMovementTime() {
-        this.lastMove = new Date().getTime();
-        this.gotToLongIdle = false;
-        this.idleCounter = 0;
-        this.effectCounter = 0;
-    }
-
-    checkLastMovement() {
-        let now = new Date().getTime();
-        let timePassed = now - this.lastMove;
-        return timePassed / 1000 > 2;
-    }
-
-    playAnimationOnce(images) {
-        let now = Date.now();
-        if (now - this.lastEffectTime < this.effectInterval) return;
-        this.lastEffectTime = now;
-        if (this.idleCounter < (images.length - 1)) {
-            let i = this.idleCounter;
-            let path = images[i];
-            this.img = this.imageCache[path];
-            this.idleCounter++;
-        }
-        if (this.idleCounter == (images.length - 1)) {
-            this.gotToLongIdle = true;
-            this.idleCounter = 0;
-        }
-    }
-
-    playAnimationJumping(images) {
-        let now = Date.now();
-        if (now - this.lastEffectTime < this.effectInterval) return;
-        this.lastEffectTime = now;
-        if (this.jumpImageCounter < (images.length - 1)) {
-            if (this.jumpImageCounter == 3) {
-                this.jump();
-            }
-            let i = this.jumpImageCounter;
-            let path = images[i];
-            this.img = this.imageCache[path];
-            this.jumpImageCounter++;
-        }
-        if (this.jumpImageCounter == 8 && !this.isAboveGround(this.groundY)) {
-            this.jumpImageCounter = 0;
-            this.startJumping = false;
-        }
     }
 
 }

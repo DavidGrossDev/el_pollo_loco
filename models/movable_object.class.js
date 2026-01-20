@@ -14,6 +14,14 @@ class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
     dead = false;
+    startJumping = false;
+    gotToLongIdle = false;
+    jumpImageCounter = 0;
+    effectCounter = 0;
+    lastEffectTime = Date.now();
+    effectInterval = 150;
+    enableMovement = true;
+    lastMove = new Date().getTime();
 
     applyGravity(groundY) {
         setInterval(() => {
@@ -35,18 +43,6 @@ class MovableObject extends DrawableObject {
         }
     }
 
-    isFallingOn(enemy) {
-        let charBottom = this.y + this.height - this.offset.bottom;
-        let enemyTop = enemy.y + enemy.offset.top;
-
-        return (
-            this.speedY > 0 &&                 // fällt nach unten
-            charBottom <= enemyTop + 20         // kleine Toleranz       
-        );
-    }
-
-
-    // character.isColliding(chicken);
     isColliding(mo) {
         return this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
             this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
@@ -98,18 +94,63 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
-    playOneWayAnimation(images) {
-        if (this.effectImage < images.length - 1) {
-            let i = this.effectImage;
-            let path = images[i];
-            this.img = this.imageCache[path];
-            this.effectImage++;
-        } else {
-            let i = images.length - 1;
-            let path = images[i];
-            this.img = this.imageCache[path];
+    setMovementTime() {
+        this.lastMove = new Date().getTime();
+        this.gotToLongIdle = false;
+        this.idleCounter = 0;
+        this.effectCounter = 0;
+    }
+
+    checkLastMovement() {
+        let now = new Date().getTime();
+        let timePassed = now - this.lastMove;
+        return timePassed / 1000 > 2;
+    }
+
+    playAnimationOnce(images, mode = "action") {
+        let now = Date.now();
+        if (now - this.lastEffectTime < this.effectInterval) return;
+        this.lastEffectTime = now;
+        if (mode === "jump") {
+            this.animateJumping(images);
+            return;
+        } else if(mode === "idle") {
+            this.animateEffect(images, mode);
+        } else if (mode === "action") {
+            this.animateEffect(images, mode)
         }
 
+    }
+
+    animateJumping(images) {
+        if (this.jumpImageCounter < (images.length - 1)) {
+                if (this.jumpImageCounter == 3) {
+                    this.jump();
+                }
+                let i = this.jumpImageCounter;
+                let path = images[i];
+                this.img = this.imageCache[path];
+                this.jumpImageCounter++;
+            }
+            if (this.jumpImageCounter == 8 && !this.isAboveGround(this.groundY)) {
+                this.jumpImageCounter = 0;
+                this.startJumping = false;
+            }
+    }
+
+    animateEffect(images, mode){
+        if (this.effectCounter < (images.length - 1)) {
+                let i = this.effectCounter;
+                let path = images[i];
+                this.img = this.imageCache[path];
+                this.effectCounter++;
+            }
+            if (this.effectCounter == (images.length - 1)) {
+                if (mode === "idle") {
+                    this.gotToLongIdle = true;
+                }
+                this.effectCounter = 0;
+            }
     }
 
 

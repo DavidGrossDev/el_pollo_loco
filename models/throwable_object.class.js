@@ -41,7 +41,7 @@ class ThrowableObject extends MovableObject {
             if (this.isDead()) {
                 this.speedY = 0;
                 this.speedX = 0;
-                this.playOneWayAnimation(this.IMAGES_SPLASH);
+                this.playAnimationOnce(this.IMAGES_SPLASH);
             } else {
                 this.x += 10;
                 this.playAnimation(this.IMAGES_ROTATE);
