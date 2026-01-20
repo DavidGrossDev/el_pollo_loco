@@ -37,10 +37,11 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    border-radius: 6px 12px;
     cursor: pointer;
     height: 25px;
     width: 110px;
-    background-color: blue;
+    background-color: rgba(0, 0, 255, 0.8);
     border-width: 0;
     color: #FFFFFF;
     transition: width 0.125s ease-in-out;
@@ -48,6 +49,7 @@ body {
 
 .startbtn:hover {
     width: 140px;
+    border-radius: 12px 6px;
 }
 
 .startbtn:active {
@@ -108,20 +110,36 @@ canvas {
     display: block;
 }
 
+.infobox {
+    display: flex;
+    justify-content: space-between;
+    width: 720px;
+}
+
+.infobox>p {
+    padding: 8px 16px;
+    color: darkblue;
+}
+
 .d_none {
     display: none;
 }
 
 @media only screen and (max-width: 720px) {
 
-    canvas {
-        width: 100%;
-    }
-
-    .overlay {
+    canvas,
+    .overlay,
+    .infobox {
         width: 100%;
     }
 }
+
+@media only screen and (max-height: 612px) {
+    .infobox {
+        display: none;
+    }
+}
+
 
 @media only screen and (max-height: 558px) {
 
