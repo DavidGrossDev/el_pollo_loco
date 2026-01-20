@@ -38,7 +38,6 @@ class ThrowableObject extends MovableObject {
         this.speedX = 35;
         this.applyGravity(this.groundY);
         setInterval(() => {
-
             if (this.isDead()) {
                 this.speedY = 0;
                 this.speedX = 0;
@@ -48,8 +47,5 @@ class ThrowableObject extends MovableObject {
                 this.playAnimation(this.IMAGES_ROTATE);
             }
         }, 25);
-
-    }
-
-   
+    }   
 }
