@@ -17,6 +17,7 @@ class Character extends MovableObject {
     lastEffectTime = Date.now();
     effectInterval = 150;
     enableMovement = true;
+    lastMove = new Date().getTime();
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -49,11 +50,37 @@ class Character extends MovableObject {
         'img/2_character_pepe/4_hurt/H-41.png',
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png'
-    ]
+    ];
+    IMAGES_IDLE = [
+        'img/2_character_pepe/1_idle/idle/I-1.png',
+        'img/2_character_pepe/1_idle/idle/I-2.png',
+        'img/2_character_pepe/1_idle/idle/I-3.png',
+        'img/2_character_pepe/1_idle/idle/I-4.png',
+        'img/2_character_pepe/1_idle/idle/I-5.png',
+        'img/2_character_pepe/1_idle/idle/I-6.png',
+        'img/2_character_pepe/1_idle/idle/I-7.png',
+        'img/2_character_pepe/1_idle/idle/I-8.png',
+        'img/2_character_pepe/1_idle/idle/I-9.png',
+        'img/2_character_pepe/1_idle/idle/I-10.png'
+    ];
+    IMAGES_LONGIDLE = [
+        'img/2_character_pepe/1_idle/long_idle/I-11.png',
+        'img/2_character_pepe/1_idle/long_idle/I-12.png',
+        'img/2_character_pepe/1_idle/long_idle/I-13.png',
+        'img/2_character_pepe/1_idle/long_idle/I-14.png',
+        'img/2_character_pepe/1_idle/long_idle/I-15.png',
+        'img/2_character_pepe/1_idle/long_idle/I-16.png',
+        'img/2_character_pepe/1_idle/long_idle/I-17.png',
+        'img/2_character_pepe/1_idle/long_idle/I-18.png',
+        'img/2_character_pepe/1_idle/long_idle/I-19.png',
+        'img/2_character_pepe/1_idle/long_idle/I-20.png'
+    ];
     world;
     walkingAudio = new Audio('./sounds/charFootsteps.mp3');
     jumpAudio = new Audio('./sounds/charjump.mp3');
-    
+
+    idleCounter = 0;
+    gotToLongIdle = false;
 
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
@@ -62,6 +89,8 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_JUMPING);
         this.loadImages(this.IMAGES_DYING);
         this.loadImages(this.IMAGES_HURT);
+        this.loadImages(this.IMAGES_IDLE);
+        this.loadImages(this.IMAGES_LONGIDLE);
         this.applyGravity(this.groundY);
         this.animate();
     }
@@ -78,10 +107,12 @@ class Character extends MovableObject {
             if (this.enableMovement && this.world.startBtnIsPressed) {
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                     this.moveRight();
+                    this.setMovementTime();
                     this.otherDirection = false;
                 }
                 if (this.world.keyboard.LEFT && this.x > 0) {
                     this.moveLeft();
+                    this.setMovementTime();
                     this.otherDirection = true;
                 }
             }
@@ -98,6 +129,11 @@ class Character extends MovableObject {
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimationJumping(this.IMAGES_DYING);
+            } else if (this.checkLastMovement()) {
+                if (this.gotToLongIdle) {
+                    this.playAnimationOnce(this.IMAGES_LONGIDLE);
+                }
+                this.playAnimationOnce(this.IMAGES_IDLE);
             } else if (this.isHurt(0.2)) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.startJumping) {
@@ -112,6 +148,34 @@ class Character extends MovableObject {
 
     }
 
+    setMovementTime() {
+        this.lastMove = new Date().getTime();
+        this.gotToLongIdle = false;
+        this.idleCounter = 0;
+        this.effectCounter = 0;
+    }
+
+    checkLastMovement() {
+        let now = new Date().getTime();
+        let timePassed = now - this.lastMove;
+        return timePassed / 1000 > 2;
+    }
+
+    playAnimationOnce(images) {
+        let now = Date.now();
+        if (now - this.lastEffectTime < this.effectInterval) return;
+        this.lastEffectTime = now;
+        if (this.idleCounter < (images.length - 1)) {
+            let i = this.idleCounter;
+            let path = images[i];
+            this.img = this.imageCache[path];
+            this.idleCounter++;
+        }
+        if (this.idleCounter == (images.length - 1)) {
+            this.gotToLongIdle = true;
+            this.idleCounter = 0;
+        }
+    }
 
     playAnimationJumping(images) {
         let now = Date.now();
@@ -129,8 +193,6 @@ class Character extends MovableObject {
         if (this.jumpImageCounter == 8 && !this.isAboveGround(this.groundY)) {
             this.jumpImageCounter = 0;
             this.startJumping = false;
-            console.log('erfolg');
-
         }
     }
 
