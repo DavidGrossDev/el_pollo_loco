@@ -132,7 +132,7 @@ class World {
     draw() {
         if (!this.startBtnIsPressed) {
             this.showStartScreen();
-            
+
         } else {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.ctx.translate(this.camera_x, 0);
@@ -188,18 +188,32 @@ class World {
     }
 
     checkEndConditions() {
-        if (this.character.energy <= 0) {
+        if (this.checkCharacterDead()) {
             this.addToMap(this.endLostScreen);
             this.stopAllCheckCollisions();
+            this.prepareForPlayAgain();
         } else if (this.checkEndbossDead()) {
             this.addToMap(this.endWinScreen);
             this.stopAllCheckCollisions();
+            this.prepareForPlayAgain();
         }
+    }
+
+    checkCharacterDead() {
+        return this.character.energy <= 0;
     }
 
     checkEndbossDead() {
         let levelEndboss = this.level.enemies[this.level.enemies.length - 1]
         return levelEndboss.energy == 0;
+    }
+
+    prepareForPlayAgain() {
+        document.getElementById('start_btn').classList.remove('d_none');
+        document.getElementById('start_btn').innerText = "Play again";
+        document.getElementById('start_btn').onclick = () => {
+            location.reload();
+        };
     }
 
     flipImage(mo) {
