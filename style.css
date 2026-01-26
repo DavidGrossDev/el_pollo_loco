@@ -126,11 +126,22 @@ canvas {
 }
 
 @media only screen and (max-width: 720px) {
-
     canvas,
     .overlay,
     .infobox {
         width: 100%;
+    }
+}
+
+@media only screen and (max-width: 580px) {
+    .overlay {
+        height: 380px;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    .overlay {
+        height: 213px;
     }
 }
 
@@ -140,24 +151,19 @@ canvas {
     }
 }
 
-
 @media only screen and (max-height: 558px) {
-
     h1 {
         display: none;
     }
-
     .overlay {
         margin: 0;
     }
 }
 
 @media only screen and (max-height: 480px) {
-
     canvas {
         height: 100vh;
     }
-
     .overlay {
         height: 100%;
     }
