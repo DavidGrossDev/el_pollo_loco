@@ -11,6 +11,7 @@ class MovableObject extends DrawableObject {
         bottom: 0,
         left: 0
     };
+    isCollected = false;
     energy = 100;
     lastHit = 0;
     dead = false;
@@ -51,7 +52,7 @@ class MovableObject extends DrawableObject {
     }
 
     hit() {
-        this.energy -= 1;
+        this.energy -= 10;
         if (this.energy < 0) {
             this.energy = 0;
         } else {
@@ -67,16 +68,6 @@ class MovableObject extends DrawableObject {
 
     isDead() {
         return this.energy == 0;
-    }
-
-    drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
     }
 
     moveRight() {
@@ -114,45 +105,63 @@ class MovableObject extends DrawableObject {
         if (mode === "jump") {
             this.animateJumping(images);
             return;
-        } else if(mode === "idle") {
+        } else if (mode === "idle") {
             this.animateEffect(images, mode);
         } else if (mode === "action") {
             this.animateEffect(images, mode)
         }
-
     }
 
     animateJumping(images) {
         if (this.jumpImageCounter < (images.length - 1)) {
-                if (this.jumpImageCounter == 3) {
-                    this.jump();
-                }
-                let i = this.jumpImageCounter;
-                let path = images[i];
-                this.img = this.imageCache[path];
-                this.jumpImageCounter++;
+            if (this.jumpImageCounter == 3) {
+                this.jump();
             }
-            if (this.jumpImageCounter == 8 && !this.isAboveGround(this.groundY)) {
-                this.jumpImageCounter = 0;
-                this.startJumping = false;
-            }
+            let i = this.jumpImageCounter;
+            let path = images[i];
+            this.img = this.imageCache[path];
+            this.jumpImageCounter++;
+        }
+        if (this.jumpImageCounter == 8 && !this.isAboveGround(this.groundY)) {
+            this.jumpImageCounter = 0;
+            this.startJumping = false;
+        }
     }
 
-    animateEffect(images, mode){
+    animateEffect(images, mode) {
         if (this.effectCounter < (images.length - 1)) {
-                let i = this.effectCounter;
-                let path = images[i];
-                this.img = this.imageCache[path];
-                this.effectCounter++;
+            let i = this.effectCounter;
+            let path = images[i];
+            this.img = this.imageCache[path];
+            this.effectCounter++;
+        }
+        if (this.effectCounter == (images.length - 1)) {
+            if (mode === "idle") {
+                this.gotToLongIdle = true;
             }
-            if (this.effectCounter == (images.length - 1)) {
-                if (mode === "idle") {
-                    this.gotToLongIdle = true;
-                }
-                this.effectCounter = 0;
-            }
+            this.effectCounter = 0;
+        }
     }
 
+    startMovementRight() {
+        this.moveRight();
+        this.setMovementTime();
+        this.otherDirection = false;
+    }
+
+    startMovementLeft() {
+        this.moveLeft();
+        this.setMovementTime();
+        this.otherDirection = true;
+    }
+
+    setJumpingVariables() {
+        this.startJumping = true;
+        this.enableMovement = false;
+        setTimeout(() => {
+            this.enableMovement = true;
+        }, 450);
+    }
 
     jump() {
         this.speedY = 35;

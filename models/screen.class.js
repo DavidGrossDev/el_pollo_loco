@@ -31,7 +31,6 @@ class Screen extends DrawableObject {
     };
     random = 0;
 
-
     constructor(arr) {
         super();
         this.x = 0;
@@ -46,5 +45,4 @@ class Screen extends DrawableObject {
         }
         this.loadImage(this.IMAGES[arr][this.random]);
     }
-
 }

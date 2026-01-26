@@ -1,6 +1,5 @@
 class StatusBar extends DrawableObject {
 
-
     IMAGES = {
         HEALTH: [
             'img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png',
@@ -39,9 +38,8 @@ class StatusBar extends DrawableObject {
         HEALTH: 100,
         COIN: 0,
         BOTTLE: 0,
-        HEALTH_ENDBOSS:100
+        HEALTH_ENDBOSS: 100
     };
-
     initialPercentage;
 
     constructor(arr, x, y) {
@@ -54,13 +52,16 @@ class StatusBar extends DrawableObject {
         this.y = y;
         this.width = 200;
         this.height = 60;
+        this.setInitialPercentage(arr);
+        this.setPercentage(arr, this.initialPercentage);
+    }
+
+    setInitialPercentage(arr) {
         if (arr == 'HEALTH' || arr == 'HEALTH_ENDBOSS') {
             this.initialPercentage = 100;
         } else {
             this.initialPercentage = 0;
         }
-        this.setPercentage(arr, this.initialPercentage);
-
     }
 
     setPercentage(arr, percentage) {

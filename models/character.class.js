@@ -10,7 +10,7 @@ class Character extends MovableObject {
         right: 30,
         bottom: 10,
         left: 20
-    };   
+    };
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -71,7 +71,7 @@ class Character extends MovableObject {
     world;
     walkingAudio = new Audio('./sounds/charFootsteps.mp3');
     jumpAudio = new Audio('./sounds/charjump.mp3');
-    
+
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.soundSettings();
@@ -96,47 +96,44 @@ class Character extends MovableObject {
         setInterval(() => {
             if (this.enableMovement && this.world.startBtnIsPressed) {
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                    this.moveRight();
-                    this.setMovementTime();
-                    this.otherDirection = false;
+                    this.startMovementRight();
                 }
                 if (this.world.keyboard.LEFT && this.x > 0) {
-                    this.moveLeft();
-                    this.setMovementTime();
-                    this.otherDirection = true;
+                    this.startMovementLeft();
                 }
             }
             if (this.world.keyboard.SPACE && !this.isAboveGround(this.groundY) && this.world.startBtnIsPressed) {
-                this.startJumping = true;
-                this.enableMovement = false;
-                setTimeout(() => {
-                    this.enableMovement = true;
-                }, 450);
-
+                this.setJumpingVariables();
             }
             this.world.camera_x = -this.x + 120;
         }, 1000 / 60);
-        
+
         setInterval(() => {
             if (this.isDead()) {
-                this.playAnimationJumping(this.IMAGES_DYING);
+                this.playAnimationOnce(this.IMAGES_DYING, "jump");
             } else if (this.checkLastMovement()) {
-                if (this.gotToLongIdle) {
-                    this.playAnimationOnce(this.IMAGES_LONGIDLE, "idle");
-                }
-                this.playAnimationOnce(this.IMAGES_IDLE, "idle");
+                this.playAnimationIdle();
             } else if (this.isHurt(0.2)) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.startJumping) {
                 this.playAnimationOnce(this.IMAGES_JUMPING, "jump");
             } else {
                 if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.startBtnIsPressed) {
-                    this.playAnimation(this.IMAGES_WALKING);
-                    this.walkingAudio.play();
+                    this.playAnimationWalking();
                 }
             }
         }, 60);
-
     }
 
+    playAnimationWalking() {
+        this.playAnimation(this.IMAGES_WALKING);
+        this.walkingAudio.play();
+    }
+
+    playAnimationIdle() {
+        if (this.gotToLongIdle) {
+            this.playAnimationOnce(this.IMAGES_LONGIDLE, "idle");
+        }
+        this.playAnimationOnce(this.IMAGES_IDLE, "idle");
+    }
 }

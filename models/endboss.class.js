@@ -49,7 +49,7 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/4_hurt/G22.png',
         'img/4_enemie_boss_chicken/4_hurt/G23.png'
     ];
-    
+
     constructor() {
         super().loadImage('img/4_enemie_boss_chicken/1_walk/G1.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -57,10 +57,8 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_ATTACK);
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
-
         this.x = 2500;
         this.energy = 800;
-
         this.animate();
     }
 
@@ -77,10 +75,7 @@ class Endboss extends MovableObject {
             }
         }, 200);
 
-
         setInterval(() => {
-
-            //     this.moveLeft();
             if (this.isDead()) {
                 setInterval(() => {
                     this.playAnimationOnce(this.IMAGES_DEAD);
@@ -89,25 +84,40 @@ class Endboss extends MovableObject {
             } else if (this.isHurt(1)) {
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.readyToAttack) {
-                this.playAnimation(this.IMAGES_ATTACK);
-                this.speed = 0.15;
-                this.moveLeft();
+                this.playAnimationEndbossAttacking();
             } else if (this.sawCharacter) {
-                if (this.alertCounter < this.IMAGES_ARLERT.length - 1) {
-                    this.playAnimation(this.IMAGES_ARLERT);
-                    this.alertCounter++;
-                } else {
-                    this.speed = 1;
-                    this.moveLeft();
-                    this.playAnimation(this.IMAGES_WALKING);
-                }
-
+                this.animationAlertOrWalking();
             }
         }, 200);
     }
 
+    animationAlertOrWalking() {
+        if (this.alertCounter < this.IMAGES_ARLERT.length - 1) {
+            this.playAnimationAlert();
+        } else {
+            this.playAnimationEndbossWalking();
+        }
+    }
+
+    playAnimationAlert() {
+        this.playAnimation(this.IMAGES_ARLERT);
+        this.alertCounter++;
+    }
+
+    playAnimationEndbossWalking() {
+        this.speed = 1;
+        this.moveLeft();
+        this.playAnimation(this.IMAGES_WALKING);
+    }
+
+    playAnimationEndbossAttacking() {
+        this.playAnimation(this.IMAGES_ATTACK);
+        this.speed = 0.15;
+        this.moveLeft();
+    }
+
     inAlertRange() {
-        return this.x - this.world.character.x < 300; 
+        return this.x - this.world.character.x < 300;
     }
 
     inAttackRange() {
