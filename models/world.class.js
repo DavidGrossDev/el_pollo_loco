@@ -1,7 +1,6 @@
 class World {
     character = new Character();
     gameOver = false;
-    level = level1;
     startScreen = new Screen('START');
     endWinScreen = new Screen('END_WIN');
     endLostScreen = new Screen('END_LOST');
@@ -23,19 +22,11 @@ class World {
     collisionBottle;
     startBtnIsPressed = false;
     time = new Date().getTime();
-    counterCounter = 0;
-    restart = false;
+    posFlankCounter = 0;
 
     constructor(canvas, keyboard, playCounter) {
-        this.playCounter = playCounter
-        if(this.playCounter == 0) {
-            localStorage.setItem("level", JSON.stringify(this.level));
-        } 
-        if (this.playCounter > 0) {
-            this.level = JSON.parse(localStorage.getItem("level"));
-            console.log(this.level);
-            
-        }
+        this.level = createNewLevel();
+        this.playCounter = playCounter;
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
@@ -62,19 +53,19 @@ class World {
         }, 200);
 
         this.collisionBottle = setInterval(() => {
-            this.checkCollisionsWithBottles();
+            this.checkEnemieCollisionsWithBottles();
         }, 100);
     }
 
     stopGame() {
+        this.character.enableMovement = false;
         this.stopCheckingCollisions();
         setTimeout(() => {
-            // for (let i = 0; i < 50; i++) {
-            //     clearInterval(i);
-            // }
+            for (let i = 0; i < 50; i++) {
+                clearInterval(i);
+            }
             this.prepareForPlayAgain();
         }, 2000);
-
     }
 
     stopCheckingCollisions() {
@@ -225,7 +216,6 @@ class World {
     checkEndConditions() {
         if (this.checkCharacterDead()) {
             this.addToMap(this.endLostScreen);
-            this.character.enableMovement = false;
             this.stopGame();
         } else if (this.checkEndbossDead()) {
             this.addToMap(this.endWinScreen);
@@ -243,17 +233,14 @@ class World {
     }
 
     prepareForPlayAgain() {
-        if (this.counterCounter == 0) { 
+        if (this.posFlankCounter == 0) {
             document.getElementById('start_btn').classList.remove('d_none');
             document.getElementById('start_btn').innerText = "Play again";
             document.getElementById('start_btn').onclick = () => {
-                init();
-                console.log("Hello World");
-                
+            init(); 
             };
         }
-
-        this.counterCounter++;
+        this.posFlankCounter++;
     }
 
     flipImage(mo) {
