@@ -61,7 +61,7 @@ body {
     bottom: 0;
     height: 60px;
     width: 100%;
-    display: flex;
+    display: none;
     justify-content: space-between;
     align-items: center;
 }
@@ -124,6 +124,11 @@ canvas {
 .d_none {
     display: none;
 }
+@media only screen and (max-width: 1024px) and (max-height: 768px){ 
+    .controlbar {
+        display: flex;
+    }
+}
 
 @media only screen and (max-width: 720px) {
     canvas,
@@ -131,11 +136,104 @@ canvas {
     .infobox {
         width: 100%;
     }
+    .overlay {
+        height: 465px;
+    }
+}
+
+@media only screen and (max-width: 674px) {
+    .overlay {
+        height: 450px;
+    }
+}
+
+@media only screen and (max-width: 652px) {
+    .overlay {
+        height: 434px;
+    }
+}
+
+@media only screen and (max-width: 626px) {
+    .overlay {
+        height: 418px;
+    }
+}
+
+@media only screen and (max-width: 605px) {
+    .overlay {
+        height: 403px;
+    }
 }
 
 @media only screen and (max-width: 580px) {
     .overlay {
-        height: 380px;
+        height: 386px;
+    }
+}
+
+@media only screen and (max-width: 533px) {
+    .overlay {
+        height: 355px;
+    }
+}
+
+@media only screen and (max-width: 556px) {
+    .overlay {
+        height: 371px;
+    }
+}
+
+@media only screen and (max-width: 532px) {
+    .overlay {
+        height: 355px;
+    }
+}
+
+@media only screen and (max-width: 508px) {
+    .overlay {
+        height: 339px;
+    }
+}
+
+@media only screen and (max-width: 485px) {
+    .overlay {
+        height: 323px;
+    }
+}
+
+@media only screen and (max-width: 462px) {
+    .overlay {
+        height: 308px;
+    }
+}
+
+@media only screen and (max-width: 440px) {
+    .overlay {
+        height: 293px;
+    }
+}
+
+@media only screen and (max-width: 416px) {
+    .overlay {
+        height: 277px;
+    }
+}
+
+@media only screen and (max-width: 392px) {
+    .overlay {
+        height: 261px;
+    }
+}
+
+@media only screen and (max-width: 366px) {
+    .overlay {
+        height: 244px;
+    }
+}
+
+@media only screen and (max-width: 343px) {
+    .overlay {
+        height: 228px;
     }
 }
 
@@ -144,6 +242,8 @@ canvas {
         height: 213px;
     }
 }
+
+
 
 @media only screen and (max-height: 612px) {
     .infobox {
