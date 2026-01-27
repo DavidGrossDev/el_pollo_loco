@@ -19,6 +19,23 @@ function startGame() {
     world.startBtnIsPressed = true;
 }
 
+function muteGame() {
+    world.mute = true;
+    document.getElementById('speaker_icon').src = "./img/speaker/mute.png";
+    document.getElementById('speaker_btn').onclick = () => {
+        activateSounds();
+    }
+
+}
+
+function activateSounds() {
+    world.mute = false;
+    document.getElementById('speaker_icon').src = "./img/speaker/speaker.png";
+    document.getElementById('speaker_btn').onclick = () => {
+        muteGame();
+    }
+}
+
 function checkButtons() {
     setInputTrue();
     setInputFalse();
