@@ -23,6 +23,7 @@ class World {
     startBtnIsPressed = false;
     time = new Date().getTime();
     posFlankCounter = 0;
+    worldaudio = new Audio("./sounds/cowbell-for-songs-phonk-217006.mp3");
 
     constructor(canvas, keyboard, playCounter) {
         this.level = createNewLevel();
@@ -31,9 +32,25 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.running = true;
+        this.musicSettings();
+        this.playWorldMusic();
         this.draw();
         this.setWorld();
         this.run();
+    }
+
+    musicSettings() {
+        this.worldaudio.volume = 0.05;
+    }
+
+    playWorldMusic() {
+        setInterval(() => {
+            if (!this.mute && this.startBtnIsPressed) {
+                this.worldaudio.play();
+            } else {
+                this.worldaudio.pause();
+            }
+        }, 200);
     }
 
     setWorld() {
@@ -44,6 +61,7 @@ class World {
     }
 
     run() {
+
         this.collisionBody = setInterval(() => {
             this.checkCollisions();
         }, 1000 / 60);
@@ -58,6 +76,8 @@ class World {
     }
 
     stopGame() {
+        this.stopAudio();
+
         this.character.enableMovement = false;
         this.stopCheckingCollisions();
         setTimeout(() => {
@@ -66,6 +86,13 @@ class World {
             }
             this.prepareForPlayAgain();
         }, 2000);
+    }
+
+    stopAudio() {
+        this.worldaudio.pause();
+        this.character.walkingAudio.pause();
+        this.character.jumpAudio.pause();
+        this.character.hurtAudio.pause();
     }
 
     stopCheckingCollisions() {
@@ -93,8 +120,9 @@ class World {
     checkEnemieCollisionsWithBottles() {
         this.level.enemies.forEach((enemy) => {
             if (this.throwableObjects.length > 0 && this.throwableObjects[0].isColliding(enemy) && enemy.energy > 0) {
-                this.resetThrowableObjects();
                 enemy.energy -= 100;
+                this.resetThrowableObjects();
+                
                 if (enemy instanceof Endboss) {
                     enemy.lastHit = new Date().getTime();
                     this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy / 8)
@@ -237,7 +265,7 @@ class World {
             document.getElementById('start_btn').classList.remove('d_none');
             document.getElementById('start_btn').innerText = "Play again";
             document.getElementById('start_btn').onclick = () => {
-            init(); 
+                init();
             };
         }
         this.posFlankCounter++;

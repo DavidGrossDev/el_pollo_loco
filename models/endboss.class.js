@@ -13,6 +13,9 @@ class Endboss extends MovableObject {
     readyToAttack = false;
     world;
     alertCounter = 0;
+    alertAudio = new Audio('./sounds/surprise.mp3');
+    burnAudio = new Audio("./sounds/fire.mp3");
+    dieAudio = new Audio('./sounds/endboss_dying.mp3');
     IMAGES_WALKING = [
         'img/4_enemie_boss_chicken/1_walk/G1.png',
         'img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -59,7 +62,15 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_HURT);
         this.x = 2500;
         this.energy = 800;
+        this.soundSettings();
         this.animate();
+    }
+
+    soundSettings() {
+        this.alertAudio.volume = 0.1;
+        this.burnAudio.playbackRate = 2;
+        this.burnAudio.volume = 0.1;
+        this.dieAudio.volume = 0.2;
     }
 
     animate() {
@@ -77,11 +88,17 @@ class Endboss extends MovableObject {
 
         setInterval(() => {
             if (this.isDead()) {
+                if(!this.world.mute) {
+                    this.dieAudio.play();
+                } else {
+                    this.dieAudio.pause();
+                }
                 setInterval(() => {
                     this.playAnimationOnce(this.IMAGES_DEAD);
                     this.y += 30;
                 }, 80);
             } else if (this.isHurt(1)) {
+                this.burnAudio.play();
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.readyToAttack) {
                 this.playAnimationEndbossAttacking();
@@ -100,6 +117,9 @@ class Endboss extends MovableObject {
     }
 
     playAnimationAlert() {
+        if(!this.world.mute) {
+            this.alertAudio.play();
+        }
         this.playAnimation(this.IMAGES_ARLERT);
         this.alertCounter++;
     }

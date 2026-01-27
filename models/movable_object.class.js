@@ -165,6 +165,9 @@ class MovableObject extends DrawableObject {
 
     jump() {
         this.speedY = 35;
-        this.jumpAudio.play();
+        if (!this.world.mute) {
+            this.jumpAudio.play();
+        }
+
     }
 }
