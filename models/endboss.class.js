@@ -88,7 +88,7 @@ class Endboss extends MovableObject {
 
         setInterval(() => {
             if (this.isDead()) {
-                if(!this.world.mute) {
+                if (!this.world.mute) {
                     this.dieAudio.play();
                 } else {
                     this.dieAudio.pause();
@@ -98,7 +98,7 @@ class Endboss extends MovableObject {
                     this.y += 30;
                 }, 80);
             } else if (this.isHurt(1)) {
-                this.burnAudio.play();
+                this.playBurnSound();
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.readyToAttack) {
                 this.playAnimationEndbossAttacking();
@@ -106,6 +106,14 @@ class Endboss extends MovableObject {
                 this.animationAlertOrWalking();
             }
         }, 200);
+    }
+
+    playBurnSound() {
+        if (!this.world.mute) {
+            this.burnAudio.play();
+        } else {
+            this.burnAudio.pause();
+        }
     }
 
     animationAlertOrWalking() {
@@ -117,7 +125,7 @@ class Endboss extends MovableObject {
     }
 
     playAnimationAlert() {
-        if(!this.world.mute) {
+        if (!this.world.mute) {
             this.alertAudio.play();
         }
         this.playAnimation(this.IMAGES_ARLERT);

@@ -57,7 +57,7 @@ class World {
         this.character.world = this;
         this.level.enemies.forEach((enemy) => {
             enemy.world = this;
-        })
+        });
     }
 
     run() {
@@ -103,7 +103,7 @@ class World {
 
     checkThrowObjects() {
         if (this.keyboard.G && this.lootedBottle > 0 && !this.checkTimeBetweenThrows()) {
-            let bottle = new ThrowableObject(this.character.x + this.character.width - 50, this.character.y + (this.character.height / 2) - 30);
+            let bottle = new ThrowableObject(this.character.x + this.character.width - 50, this.character.y + (this.character.height / 2) - 30, this.character.otherDirection);
             this.lootedBottle -= 17;
             this.statusBarBottle.setPercentage('BOTTLE', this.lootedBottle);
             this.throwableObjects.push(bottle);
