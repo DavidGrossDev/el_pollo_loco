@@ -32,6 +32,38 @@ body {
     position: relative;
 }
 
+.rotateInfo {
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: aqua;
+    border-radius: 6px 12px;
+    padding: 16px;
+    display: none;
+}
+
+.speakerbtn {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-width: 0;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.speakerbtn>img {
+    height: 20px;
+    width: 20px;
+}
+
 .startbtn {
     position: absolute;
     top: 50%;
@@ -124,9 +156,18 @@ canvas {
 .d_none {
     display: none;
 }
-@media only screen and (max-width: 1024px) and (max-height: 768px){ 
+@media only screen and (max-width: 1024px) and (orientation: landscape){ 
     .controlbar {
         display: flex;
+    }
+}
+
+@media only screen and (max-width: 400px) and (orientation: portrait){ 
+    .rotateInfo {
+        display: flex;
+    }
+    .startbtn {
+        display: none;
     }
 }
 
@@ -219,31 +260,11 @@ canvas {
     }
 }
 
-@media only screen and (max-width: 392px) {
-    .overlay {
-        height: 261px;
+@media only screen and (max-width: 336px) {
+    .infobox>p {
+        font-size: 14px;
     }
 }
-
-@media only screen and (max-width: 366px) {
-    .overlay {
-        height: 244px;
-    }
-}
-
-@media only screen and (max-width: 343px) {
-    .overlay {
-        height: 228px;
-    }
-}
-
-@media only screen and (max-width: 320px) {
-    .overlay {
-        height: 213px;
-    }
-}
-
-
 
 @media only screen and (max-height: 612px) {
     .infobox {
