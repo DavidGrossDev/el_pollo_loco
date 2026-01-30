@@ -113,7 +113,13 @@ class MovableObject extends DrawableObject {
     }
 
     animateJumping(images) {
-        if (this.jumpImageCounter < (images.length - 1)) {
+
+        if (this.jumpImageCounter == images.length && !this.isAboveGround(this.groundY)) {
+            this.startJumping = false;
+            this.jumpImageCounter = 0;
+            return;
+        }
+        if (this.jumpImageCounter < images.length) {
             if (this.jumpImageCounter == 3) {
                 this.jump();
             }
@@ -122,24 +128,22 @@ class MovableObject extends DrawableObject {
             this.img = this.imageCache[path];
             this.jumpImageCounter++;
         }
-        if (this.jumpImageCounter == 8 && !this.isAboveGround(this.groundY)) {
-            this.jumpImageCounter = 0;
-            this.startJumping = false;
-        }
     }
 
+
     animateEffect(images, mode) {
+        if (this.effectCounter == images.length - 1) {
+            if (mode === "idle") {
+                this.gotToLongIdle = true;
+            }
+            this.effectCounter = 0;
+            return;
+        }
         if (this.effectCounter < (images.length - 1)) {
             let i = this.effectCounter;
             let path = images[i];
             this.img = this.imageCache[path];
             this.effectCounter++;
-        }
-        if (this.effectCounter == (images.length - 1)) {
-            if (mode === "idle") {
-                this.gotToLongIdle = true;
-            }
-            this.effectCounter = 0;
         }
     }
 
@@ -165,7 +169,7 @@ class MovableObject extends DrawableObject {
 
     jump() {
         this.speedY = 35;
-        if (!this.world.mute) {
+        if (!this.world.isMuted) {
             this.jumpAudio.play();
         }
 

@@ -5,7 +5,21 @@ let playCounter = 0;
 
 function init() {
     canvas = document.getElementById('canvas');
+    
+    if (world) {
+        world.stopGame();
+    }
     world = new World(canvas, keyboard, playCounter);
+    let shit = JSON.parse(localStorage.getItem("audio"));
+    
+    if(shit != null) {
+        if(shit) {
+            world.stopAudio(); 
+            world.isMuted = true;
+            document.getElementById('speaker_icon').src = "./img/speaker/mute.png";  
+        }   
+    }
+    
     checkButtons();
     if (playCounter > 0) {
         document.getElementById('start_btn').classList.add('d_none');
@@ -17,24 +31,13 @@ function init() {
 function startGame() {
     document.getElementById('start_btn').classList.add('d_none');
     world.startBtnIsPressed = true;
+    world.playWorldMusic();
 }
 
-function muteGame() {
-    world.mute = true;
-    document.getElementById('speaker_icon').src = "./img/speaker/mute.png";
-    document.getElementById('speaker_btn').onclick = () => {
-        activateSounds();
-    }
-
+function toogleGameAudio() {
+     world.toggleMute();
 }
 
-function activateSounds() {
-    world.mute = false;
-    document.getElementById('speaker_icon').src = "./img/speaker/speaker.png";
-    document.getElementById('speaker_btn').onclick = () => {
-        muteGame();
-    }
-}
 
 function checkButtons() {
     setInputTrue();

@@ -13,6 +13,7 @@ class Endboss extends MovableObject {
     readyToAttack = false;
     world;
     alertCounter = 0;
+    audioCounter = 0;
     alertAudio = new Audio('./sounds/surprise.mp3');
     burnAudio = new Audio("./sounds/fire.mp3");
     dieAudio = new Audio('./sounds/endboss_dying.mp3');
@@ -88,10 +89,11 @@ class Endboss extends MovableObject {
 
         setInterval(() => {
             if (this.isDead()) {
-                if (!this.world.mute) {
+                if (!this.world.isMuted) {
                     this.dieAudio.play();
                 } else {
                     this.dieAudio.pause();
+                    this.dieAudio.currentTime = 0;
                 }
                 setInterval(() => {
                     this.playAnimationOnce(this.IMAGES_DEAD);
@@ -109,10 +111,11 @@ class Endboss extends MovableObject {
     }
 
     playBurnSound() {
-        if (!this.world.mute) {
-            this.burnAudio.play();
+        if (!this.world.isMuted) {
+            this.burnAudio.play();           
         } else {
             this.burnAudio.pause();
+            this.burnAudio.currentTime = 0;
         }
     }
 
@@ -125,15 +128,18 @@ class Endboss extends MovableObject {
     }
 
     playAnimationAlert() {
-        if (!this.world.mute) {
+        if (!this.world.isMuted) {
             this.alertAudio.play();
+        } else {
+            this.alertAudio.pause();
+            this.alertAudio.currentTime = 0;
         }
         this.playAnimation(this.IMAGES_ARLERT);
         this.alertCounter++;
     }
 
     playAnimationEndbossWalking() {
-        this.speed = 1;
+        this.speed = 3;
         this.moveLeft();
         this.playAnimation(this.IMAGES_WALKING);
     }
@@ -145,7 +151,7 @@ class Endboss extends MovableObject {
     }
 
     inAlertRange() {
-        return this.x - this.world.character.x < 300;
+        return this.x - this.world.character.x < 580;
     }
 
     inAttackRange() {

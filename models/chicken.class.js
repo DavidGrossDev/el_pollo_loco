@@ -64,20 +64,23 @@ class Chicken extends MovableObject {
         let setMoveLeft = setInterval(() => {
             if (this.world.startBtnIsPressed) {
                 this.moveLeft();
-                if(!this.world.mute) {
+                if(!this.world.isMuted) {
                     this.walkAudio.play();
                 } else {
                     this.walkAudio.pause();
+                    this.walkAudio.currentTime = 0;
                 } 
             }
         }, 1000 / 60);
         setInterval(() => {
             if (this.isDead()) {
-                if(!this.world.mute && this.counter < 1) {
+                if(!this.world.isMuted && this.counter < 1) {
                     this.dieAudio.play();
                 } else {
                     this.walkAudio.pause();
+                    this.walkAudio.currentTime = 0;
                     this.dieAudio.pause();
+                    this.dieAudio.currentTime = 0;
                 }
                 this.playAnimation(this.IMAGE_DEAD[arr]);
                 clearInterval(setMoveLeft);
@@ -86,7 +89,7 @@ class Chicken extends MovableObject {
             } else {
                 this.playAnimation(this.IMAGES_WALKING[arr])
             }
-        }, 200);
+        }, 120);
     }
 
 }

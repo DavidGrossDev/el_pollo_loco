@@ -23,7 +23,7 @@ class World {
     startBtnIsPressed = false;
     time = new Date().getTime();
     posFlankCounter = 0;
-    worldaudio = new Audio("./sounds/cowbell-for-songs-phonk-217006.mp3");
+    check;
 
     constructor(canvas, keyboard, playCounter) {
         this.level = createNewLevel();
@@ -32,25 +32,40 @@ class World {
         this.canvas = canvas;
         this.keyboard = keyboard;
         this.running = true;
-        this.musicSettings();
-        this.playWorldMusic();
+        this.worldMusic = new Audio("./sounds/cowbell-for-songs-phonk-217006.mp3");
+        this.worldMusic.volume = 0.05;
+        this.worldMusic.loop = true;
         this.draw();
         this.setWorld();
         this.run();
     }
 
-    musicSettings() {
-        this.worldaudio.volume = 0.05;
+    toggleMute() {
+
+        this.isMuted = !this.isMuted;
+
+        if (this.isMuted) {
+            this.worldMusic.pause();
+            this.mute = true;
+            localStorage.setItem("audio", JSON.stringify(world.mute));
+            document.getElementById('speaker_icon').src = "./img/speaker/mute.png";
+        } else {
+            this.playWorldMusic();
+            this.mute = false;
+            localStorage.setItem("audio", JSON.stringify(world.mute));
+            document.getElementById('speaker_icon').src = "./img/speaker/speaker.png";
+        }
     }
 
+
     playWorldMusic() {
-        setInterval(() => {
-            if (!this.mute && this.startBtnIsPressed) {
-                this.worldaudio.play();
-            } else {
-                this.worldaudio.pause();
-            }
-        }, 200);
+
+        if (this.isMuted) return;
+        if (!this.startBtnIsPressed) return;
+
+        if (this.worldMusic.paused) {
+            this.worldMusic.play();
+        }
     }
 
     setWorld() {
@@ -76,23 +91,29 @@ class World {
     }
 
     stopGame() {
-        this.stopAudio();
-
-        this.character.enableMovement = false;
-        this.stopCheckingCollisions();
-        setTimeout(() => {
-            for (let i = 0; i < 50; i++) {
-                clearInterval(i);
-            }
-            this.prepareForPlayAgain();
-        }, 2000);
+        if (!this.gameOver) {
+            this.stopAudio();
+            this.stopCheckingCollisions();
+            this.character.enableMovement = false;
+            setTimeout(() => {
+                for (let i = 0; i < 9999; i++) {
+                    clearInterval(i);
+                }
+                this.prepareForPlayAgain();
+                this.gameOver = true;
+            }, 1000);
+        }
     }
 
     stopAudio() {
-        this.worldaudio.pause();
+        this.worldMusic.pause();
+        this.worldMusic.currentTime = 0;
         this.character.walkingAudio.pause();
+        this.character.walkingAudio.currentTime = 0;
         this.character.jumpAudio.pause();
+        this.character.jumpAudio.currentTime = 0;
         this.character.hurtAudio.pause();
+        this.character.hurtAudio.currentTime = 0;
     }
 
     stopCheckingCollisions() {
@@ -108,6 +129,8 @@ class World {
             this.statusBarBottle.setPercentage('BOTTLE', this.lootedBottle);
             this.throwableObjects.push(bottle);
             this.time = new Date().getTime();
+            this.character.setMovementTime();
+            this.character.loadImage('./img/2_character_pepe/1_idle/idle/I-1.png');
         }
     }
 
@@ -122,7 +145,7 @@ class World {
             if (this.throwableObjects.length > 0 && this.throwableObjects[0].isColliding(enemy) && enemy.energy > 0) {
                 enemy.energy -= 100;
                 this.resetThrowableObjects();
-                
+
                 if (enemy instanceof Endboss) {
                     enemy.lastHit = new Date().getTime();
                     this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy / 8)
@@ -144,7 +167,6 @@ class World {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy) && this.character.speedY < 0 && enemy.energy > 0) {
                 enemy.energy -= 100;
-                this.character.speedY = 10;
             } else if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.startJumping) {
                 if (!this.character.isHurt(0.2)) {
                     this.character.hit();
