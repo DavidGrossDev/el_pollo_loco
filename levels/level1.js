@@ -2,12 +2,12 @@
 function createNewLevel() {
     return new Level(
         [
-            new Chicken('normal'),
-            new Chicken('normal'),
-            new Chicken('normal'),
-            new Chicken('small'),
-            new Chicken('small'),
-            new Chicken('small'),
+            // new Chicken('normal'),
+            // new Chicken('normal'),
+            // new Chicken('normal'),
+            // new Chicken('small'),
+            // new Chicken('small'),
+            // new Chicken('small'),
             new Endboss()
         ],
         [
