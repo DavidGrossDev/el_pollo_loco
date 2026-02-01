@@ -46,6 +46,7 @@ class World {
 
         if (this.isMuted) {
             this.worldMusic.pause();
+            this.worldMusic.currentTime = 0;
             this.mute = true;
             localStorage.setItem("audio", JSON.stringify(world.mute));
             document.getElementById('speaker_icon').src = "./img/speaker/mute.png";
