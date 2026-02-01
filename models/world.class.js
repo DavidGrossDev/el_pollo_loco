@@ -81,11 +81,11 @@ class World {
 
         this.throwBottle = setInterval(() => {
             this.checkThrowObjects();
-        }, 200);
+        }, 1000 / 60);
 
         this.collisionBottle = setInterval(() => {
             this.checkEnemieCollisionsWithBottles();
-        }, 100);
+        }, 1000 / 60);
     }
 
     stopGame() {
@@ -135,24 +135,25 @@ class World {
     checkTimeBetweenThrows() {
         let timePassed = new Date().getTime() - this.time;
         timePassed = timePassed / 1000;
-        return timePassed < 1;
+        return timePassed < 2;
     }
 
     checkEnemieCollisionsWithBottles() {
         this.level.enemies.forEach((enemy) => {
-            if (this.throwableObjects.length > 0 && this.throwableObjects[0].isColliding(enemy) && enemy.energy > 0) {
-                enemy.energy -= 100;
+            if (this.throwableObjects.length > 0 && this.throwableObjects[0].isColliding(enemy) && enemy.energy > 0 && enemy.canBeHit(enemy)) {
+                enemy.energy -= 120;
+                enemy.lastHit = Date.now();
                 this.resetThrowableObjects();
-
                 if (enemy instanceof Endboss) {
-                    enemy.lastHit = new Date().getTime();
-                    this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy / 8)
+                    this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy / 6);
                 }
-            } else if (this.throwableObjects.length > 0 && this.throwableObjects[0].y > 360) {
+            }
+            else if (this.throwableObjects.length > 0 && this.throwableObjects[0].y > 325) {
                 this.resetThrowableObjects();
             }
-        })
+        });
     }
+
 
     checkCollisions() {
         this.checkCollisionWithEnemies();
@@ -163,8 +164,12 @@ class World {
 
     checkCollisionWithEnemies() {
         this.level.enemies.forEach((enemy) => {
-            if (this.character.isColliding(enemy) && this.character.speedY < 0 && enemy.energy > 0) {
-                enemy.energy -= 100;
+            if (this.character.isColliding(enemy) && this.character.speedY < 0 && enemy.energy > 0 && enemy.canBeHit(enemy)) {
+                enemy.energy -= 120;
+                enemy.lastHit = Date.now();
+                if (enemy instanceof Endboss) {
+                    this.statusBarHealthEndboss.setPercentage('HEALTH_ENDBOSS', enemy.energy / 6);
+                }
             } else if (this.character.isColliding(enemy) && enemy.energy > 0 && !this.character.startJumping) {
                 if (!this.character.isHurt(0.2)) {
                     this.character.hit();
@@ -277,7 +282,7 @@ class World {
 
     checkEndbossDead() {
         let levelEndboss = this.level.enemies[this.level.enemies.length - 1]
-        return levelEndboss.energy == 0;
+        return levelEndboss.energy <= 0;
     }
 
     prepareForPlayAgain() {
