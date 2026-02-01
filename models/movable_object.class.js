@@ -104,7 +104,7 @@ class MovableObject extends DrawableObject {
     checkLastMovement() {
         let now = new Date().getTime();
         let timePassed = now - this.lastMove;
-        return timePassed / 1000 > 3;
+        return timePassed / 1000 > 5;
     }
 
     playAnimationOnce(images, mode = "action", effectInterval) {
@@ -168,10 +168,6 @@ class MovableObject extends DrawableObject {
 
     setJumpingVariables() {
         this.startJumping = true;
-        // this.enableMovement = false;
-        setTimeout(() => {
-            // this.enableMovement = true;
-        }, 750);
     }
 
     jump() {
