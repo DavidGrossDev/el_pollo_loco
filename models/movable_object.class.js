@@ -117,11 +117,12 @@ class MovableObject extends DrawableObject {
     }
 
     animateJumping(images) {
-
         if (this.jumpImageCounter == images.length && !this.isAboveGround(this.groundY)) {
-            this.startJumping = false;
             this.jumpImageCounter = 0;
             return;
+        }
+        if (this.jumpImageCounter == images.length - 2) {
+            this.startJumping = false;
         }
         if (this.jumpImageCounter < images.length) {
             if (this.jumpImageCounter == 3) {
@@ -168,7 +169,7 @@ class MovableObject extends DrawableObject {
         this.enableMovement = false;
         setTimeout(() => {
             this.enableMovement = true;
-        }, 450);
+        }, 750);
     }
 
     jump() {
