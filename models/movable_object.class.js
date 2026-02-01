@@ -48,6 +48,11 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    canBeHit(enemy) {
+        const now = Date.now();
+        return now - enemy.lastHit > 1500;
+    }
+
     isColliding(mo) {
         return this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
             this.y + this.height - this.offset.bottom > mo.y + mo.offset.top &&
@@ -71,7 +76,7 @@ class MovableObject extends DrawableObject {
     }
 
     isDead() {
-        return this.energy == 0;
+        return this.energy <= 0;
     }
 
     moveRight() {
@@ -99,12 +104,12 @@ class MovableObject extends DrawableObject {
     checkLastMovement() {
         let now = new Date().getTime();
         let timePassed = now - this.lastMove;
-        return timePassed / 1000 > 2;
+        return timePassed / 1000 > 3;
     }
 
-    playAnimationOnce(images, mode = "action") {
+    playAnimationOnce(images, mode = "action", effectInterval) {
         let now = Date.now();
-        if (now - this.lastEffectTime < this.effectInterval) return;
+        if (now - this.lastEffectTime < effectInterval) return;
         this.lastEffectTime = now;
         if (mode === "jump") {
             this.animateJumping(images);
@@ -117,15 +122,13 @@ class MovableObject extends DrawableObject {
     }
 
     animateJumping(images) {
-        if (this.jumpImageCounter == images.length && !this.isAboveGround(this.groundY)) {
+        if (this.jumpImageCounter == images.length) {
             this.jumpImageCounter = 0;
+            this.startJumping = false;
             return;
         }
-        if (this.jumpImageCounter == images.length - 2) {
-            this.startJumping = false;
-        }
         if (this.jumpImageCounter < images.length) {
-            if (this.jumpImageCounter == 3) {
+            if (this.jumpImageCounter == 0) {
                 this.jump();
             }
             let i = this.jumpImageCounter;
@@ -134,7 +137,6 @@ class MovableObject extends DrawableObject {
             this.jumpImageCounter++;
         }
     }
-
 
     animateEffect(images, mode) {
         if (this.effectCounter == images.length - 1) {
@@ -166,9 +168,9 @@ class MovableObject extends DrawableObject {
 
     setJumpingVariables() {
         this.startJumping = true;
-        this.enableMovement = false;
+        // this.enableMovement = false;
         setTimeout(() => {
-            this.enableMovement = true;
+            // this.enableMovement = true;
         }, 750);
     }
 
