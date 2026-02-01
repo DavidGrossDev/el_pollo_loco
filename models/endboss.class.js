@@ -4,10 +4,10 @@ class Endboss extends MovableObject {
     width = 300;
     speed = 1;
     offset = {
-        top: 55,
-        right: 30,
-        bottom: 10,
-        left: 25
+        top: 60,
+        right: 50,
+        bottom: 45,
+        left: 50
     };
     sawCharacter = false;
     readyToAttack = false;
@@ -16,7 +16,6 @@ class Endboss extends MovableObject {
     audioCounter = 0;
     alertAudio = new Audio('./sounds/surprise.mp3');
     burnAudio = new Audio("./sounds/fire.mp3");
-    dieAudio = new Audio('./sounds/endboss_dying.mp3');
     IMAGES_WALKING = [
         './img/4_enemie_boss_chicken/1_walk/G1.png',
         './img/4_enemie_boss_chicken/1_walk/G2.png',
@@ -62,7 +61,7 @@ class Endboss extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.x = 2500;
-        this.energy = 800;
+        this.energy = 600;
         this.soundSettings();
         this.animate();
     }
@@ -71,7 +70,6 @@ class Endboss extends MovableObject {
         this.alertAudio.volume = 0.1;
         this.burnAudio.playbackRate = 2;
         this.burnAudio.volume = 0.1;
-        this.dieAudio.volume = 0.2;
     }
 
     animate() {
@@ -89,12 +87,6 @@ class Endboss extends MovableObject {
 
         setInterval(() => {
             if (this.isDead()) {
-                if (!this.world.isMuted) {
-                    this.dieAudio.play();
-                } else {
-                    this.dieAudio.pause();
-                    this.dieAudio.currentTime = 0;
-                }
                 setInterval(() => {
                     this.playAnimationOnce(this.IMAGES_DEAD);
                     this.y += 30;
@@ -111,8 +103,8 @@ class Endboss extends MovableObject {
     }
 
     playBurnSound() {
-        if (!this.world.isMuted) {
-            this.burnAudio.play();           
+        if (!this.world.isMuted && !this.world.checkCharacterDead() && !this.world.checkEndbossDead()) {
+            this.burnAudio.play();
         } else {
             this.burnAudio.pause();
             this.burnAudio.currentTime = 0;
@@ -128,7 +120,7 @@ class Endboss extends MovableObject {
     }
 
     playAnimationAlert() {
-        if (!this.world.isMuted) {
+        if (!this.world.isMuted && !this.world.checkCharacterDead() && !this.world.checkEndbossDead()) {
             this.alertAudio.play();
         } else {
             this.alertAudio.pause();
@@ -139,7 +131,7 @@ class Endboss extends MovableObject {
     }
 
     playAnimationEndbossWalking() {
-        this.speed = 3;
+        this.speed = 20;
         this.moveLeft();
         this.playAnimation(this.IMAGES_WALKING);
     }

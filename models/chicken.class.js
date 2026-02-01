@@ -67,8 +67,10 @@ class Chicken extends MovableObject {
         let setMoveLeft = setInterval(() => {
             if (this.world.startBtnIsPressed) {
                 this.moveLeft();
-                if(!this.world.isMuted) {
+                if(!this.world.checkCharacterDead() && !this.world.checkEndbossDead() && !this.world.isMuted) {
                     this.walkAudio.play();
+                    
+                    
                 } else {
                     this.walkAudio.pause();
                     this.walkAudio.currentTime = 0;
@@ -77,7 +79,7 @@ class Chicken extends MovableObject {
         }, 1000 / 60);
         setInterval(() => {
             if (this.isDead()) {
-                if(!this.world.isMuted && this.counter < 1) {
+                if(!this.world.isMuted && this.counter < 1 && !this.world.checkCharacterDead() && !this.world.checkEndbossDead()) {
                     this.dieAudio.play();
                 } else {
                     this.walkAudio.pause();
