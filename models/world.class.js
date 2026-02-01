@@ -59,10 +59,8 @@ class World {
 
 
     playWorldMusic() {
-
         if (this.isMuted) return;
         if (!this.startBtnIsPressed) return;
-
         if (this.worldMusic.paused) {
             this.worldMusic.play();
         }
