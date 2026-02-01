@@ -30,7 +30,7 @@ class ThrowableObject extends MovableObject {
         this.width = 50;
         this.height = 100;
         this.direktion = otherDirection;
-        this.throw(); 
+        this.throw();
     }
 
 
@@ -41,9 +41,15 @@ class ThrowableObject extends MovableObject {
             if (this.isDead()) {
                 this.speedY = 0;
                 this.speedX = 0;
+                this.offset = {
+                    top: 10,
+                    right: 10,
+                    bottom: 10,
+                    left: 10
+                };
                 this.playAnimationOnce(this.IMAGES_SPLASH);
             } else {
-                if(!this.direktion) {
+                if (!this.direktion) {
                     this.x += 10;
                     this.speedX = 35;
                 } else {
@@ -51,8 +57,8 @@ class ThrowableObject extends MovableObject {
                     this.x -= 10;
                 }
                 this.playAnimation(this.IMAGES_ROTATE);
-                
+
             }
         }, 25);
-    }   
+    }
 }
