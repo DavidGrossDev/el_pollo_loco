@@ -1,8 +1,8 @@
 class Coin extends MovableObject {
 
     IMAGES_GLOWING = [
-        'img/8_coin/coin_1.png',
-        'img/8_coin/coin_2.png'
+        './img/8_coin/coin_1.png',
+        './img/8_coin/coin_2.png'
     ];
     offset = {
         top: 45,
@@ -12,7 +12,7 @@ class Coin extends MovableObject {
     };
 
     constructor(x, y) {
-        super().loadImage('img/8_coin/coin_1.png');
+        super().loadImage('./img/8_coin/coin_1.png');
         this.loadImages(this.IMAGES_GLOWING);
         this.width = 120;
         this.height = 120;

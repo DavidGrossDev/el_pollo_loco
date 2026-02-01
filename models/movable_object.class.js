@@ -24,6 +24,10 @@ class MovableObject extends DrawableObject {
     enableMovement = true;
     lastMove = new Date().getTime();
 
+    constructor() {
+        super();
+    }
+
     applyGravity(groundY) {
         setInterval(() => {
             if (this.isAboveGround(groundY) || this.speedY > 0) {

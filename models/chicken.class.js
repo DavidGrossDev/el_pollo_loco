@@ -13,27 +13,27 @@ class Chicken extends MovableObject {
     walkAudio = new Audio('./sounds/chicken_sound.mp3');
     IMAGES_WALKING = {
         normal: [
-            'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
-            'img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
-            'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
+            './img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
+            './img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
+            './img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
         ],
         small: [
-            'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
-            'img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
-            'img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
+            './img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+            './img/3_enemies_chicken/chicken_small/1_walk/2_w.png',
+            './img/3_enemies_chicken/chicken_small/1_walk/3_w.png'
         ]
     }
     IMAGE_DEAD = {
         normal: [
-            'img/3_enemies_chicken/chicken_normal/2_dead/dead.png'
+            './img/3_enemies_chicken/chicken_normal/2_dead/dead.png'
         ],
         small: [
-            'img/3_enemies_chicken/chicken_small/2_dead/dead.png'
+            './img/3_enemies_chicken/chicken_small/2_dead/dead.png'
         ]
     }
 
     constructor(arr) {
-        super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
+        super();
         this.loadImages(this.IMAGES_WALKING[arr]);
         this.loadImages(this.IMAGE_DEAD[arr]);
         this.setOffset(arr);
@@ -51,12 +51,15 @@ class Chicken extends MovableObject {
 
     setOffset(arr) {
         if (arr === 'small') {
+            this.loadImage('./img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
             this.offset = {
                 top: 8,
                 right: 8,
                 bottom: 7,
                 left: 8
             };
+        } else {
+            this.loadImage('./img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         }
     }
 
