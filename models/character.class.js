@@ -20,8 +20,6 @@ class Character extends MovableObject {
         'img/2_character_pepe/2_walk/W-26.png'
     ];
     IMAGES_JUMPING = [
-        'img/2_character_pepe/3_jump/J-31.png',
-        'img/2_character_pepe/3_jump/J-32.png',
         'img/2_character_pepe/3_jump/J-33.png',
         'img/2_character_pepe/3_jump/J-34.png',
         'img/2_character_pepe/3_jump/J-35.png',
@@ -120,8 +118,8 @@ class Character extends MovableObject {
                     this.hurtAudio.pause();
                 }
                 this.playAnimation(this.IMAGES_HURT);
-            } else if (this.startJumping) {
-                this.playAnimationOnce(this.IMAGES_JUMPING, "jump");
+            } else if (this.startJumping || this.isAboveGround(this.groundY)) {
+                this.playAnimationOnce(this.IMAGES_JUMPING, "jump", 80);
                 this.setMovementTime();
             } else if (this.checkLastMovement()) {
                 this.playAnimationIdle();
@@ -138,13 +136,12 @@ class Character extends MovableObject {
         if(!this.world.isMuted) {
             this.walkingAudio.play();
         }
-        
     }
 
     playAnimationIdle() {
         if (this.gotToLongIdle) {
-            this.playAnimationOnce(this.IMAGES_LONGIDLE, "idle");
+            this.playAnimationOnce(this.IMAGES_LONGIDLE, "idle", 300);
         }
-        this.playAnimationOnce(this.IMAGES_IDLE, "idle");
+        this.playAnimationOnce(this.IMAGES_IDLE, "idle", 300);
     }
 }

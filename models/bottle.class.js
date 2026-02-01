@@ -19,7 +19,7 @@ class Bottle extends MovableObject {
                 left: 15
             };
         }
-        this.x = 200 + (Math.random() * 1800);
+        this.x = 350 + (Math.random() * 1800);
         this.y = 330;
         this.width = 50;
         this.height = 100;
