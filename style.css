@@ -193,7 +193,8 @@ canvas {
 .d_none {
     display: none;
 }
-@media only screen and (max-width: 1024px)  { 
+
+@media (pointer: coarse)  { 
     .controlbar {
         display: flex;
     }
