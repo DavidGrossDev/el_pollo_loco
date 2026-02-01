@@ -33,17 +33,26 @@
 <body onload="init()">
     <section id="game_overlay" class="overlay">
         <div class="overlayTemplate">
-            <button id="speaker_btn" class="speakerbtn" onclick="toogleGameAudio()"><img id="speaker_icon" src="./img/speaker/speaker.png" alt=""></button>
+            <div class="sound-impress">
+                <button class="impressum" title="to Impressum"><a href="./impressum.html"><img
+                            src="./img/impress/info.png" alt=""></a>
+                </button>
+                <button id="speaker_btn" class="speakerbtn" onclick="toogleGameAudio()" title="sound ON/OFF"><img
+                        id="speaker_icon" src="./img/speaker/speaker.png" alt="">
+                </button>
+            </div>
+
             <div class="rotateInfo">please rotate your Device</div>
-            <button id="start_btn" class="startbtn" onclick="startGame()">Start Game</button>
+            <button id="start_btn" class="startbtn" onclick="startGame()" title="start the Game">Start Game</button>
             <div class="controlbar">
                 <div>
-                    <button id="btn_left"><img src="./img/arrows/arrow_left.png" alt=""></button>
-                    <button id="btn_right"><img src="./img/arrows/arrow_right.png" alt=""></button>
+                    <button id="btn_left" title="turn Left"><img src="./img/arrows/arrow_left.png" alt=""></button>
+                    <button id="btn_right" title="turn Right"><img src="./img/arrows/arrow_right.png" alt=""></button>
                 </div>
                 <div>
-                    <button id="btn_jump"><img src="./img/arrows/arrow_jump.png" alt=""></button>
-                    <button id="btn_throw"><img class="throwimg" src="./img/arrows/arrow_throw.png" alt=""></button>
+                    <button id="btn_jump" title="jump"><img src="./img/arrows/arrow_jump.png" alt=""></button>
+                    <button id="btn_throw" title="throw"><img class="throwimg" src="./img/arrows/arrow_throw.png"
+                            alt=""></button>
                 </div>
             </div>
         </div>
