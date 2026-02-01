@@ -131,7 +131,7 @@ class Endboss extends MovableObject {
     }
 
     playAnimationEndbossWalking() {
-        this.speed = 20;
+        this.speed = 40;
         this.moveLeft();
         this.playAnimation(this.IMAGES_WALKING);
     }
