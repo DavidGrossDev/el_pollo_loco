@@ -56,7 +56,7 @@ class Chicken extends MovableObject {
                 top: 8,
                 right: 8,
                 bottom: 7,
-                left: 8
+                left: 10
             };
         } else {
             this.loadImage('./img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');

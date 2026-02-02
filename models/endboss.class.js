@@ -131,9 +131,18 @@ class Endboss extends MovableObject {
     }
 
     playAnimationEndbossWalking() {
-        this.speed = 40;
-        this.moveLeft();
-        this.playAnimation(this.IMAGES_WALKING);
+        if (this.world.character.x <= this.x) {
+            this.speed = 40;  
+            this.otherDirection = false;
+            this.moveLeft();
+            this.playAnimation(this.IMAGES_WALKING);
+        } else {
+            this.speed = 40;
+            this.otherDirection= true;
+            this.moveRight();
+            this.playAnimation(this.IMAGES_WALKING);
+        }
+
     }
 
     playAnimationEndbossAttacking() {
@@ -149,7 +158,7 @@ class Endboss extends MovableObject {
     inAttackRange() {
         let endbossX = this.x + this.offset.left;
         let characterX = this.world.character.x + this.world.character.width - (this.world.character.offset.left + this.world.character.offset.right);
-        return endbossX - characterX < 21;
+        return endbossX - characterX < 21 && endbossX - characterX > 0;
     }
 
 

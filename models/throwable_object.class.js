@@ -39,26 +39,33 @@ class ThrowableObject extends MovableObject {
         this.applyGravity(this.groundY);
         setInterval(() => {
             if (this.isDead()) {
-                this.speedY = 0;
-                this.speedX = 0;
-                this.offset = {
-                    top: 10,
-                    right: 10,
-                    bottom: 10,
-                    left: 10
-                };
+                this.setBrokeVariables();
                 this.playAnimationOnce(this.IMAGES_SPLASH);
             } else {
-                if (!this.direktion) {
-                    this.x += 10;
-                    this.speedX = 35;
-                } else {
-                    this.speedX = -35;
-                    this.x -= 10;
-                }
+                this.setSettingsForThrow();
                 this.playAnimation(this.IMAGES_ROTATE);
-
             }
         }, 25);
+    }
+
+    setBrokeVariables() {
+        this.speedY = 0;
+        this.speedX = 0;
+        this.offset = {
+            top: 10,
+            right: 10,
+            bottom: 10,
+            left: 10
+        };
+    }
+
+    setSettingsForThrow() {
+        if (!this.direktion) {
+            this.x += 10;
+            this.speedX = 35;
+        } else {
+            this.speedX = -35;
+            this.x -= 10;
+        }
     }
 }
