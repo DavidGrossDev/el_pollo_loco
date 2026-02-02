@@ -90,8 +90,8 @@ class World {
     }
 
     stopGame() {
+        this.stopAudio();
         if (!this.gameOver) {
-            this.stopAudio();
             this.stopCheckingCollisions();
             this.character.enableMovement = false;
             setTimeout(() => {
