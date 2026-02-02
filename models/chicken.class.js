@@ -11,6 +11,7 @@ class Chicken extends MovableObject {
     counter = 0;
     dieAudio = new Audio('./sounds/chicken_die.mp3');
     walkAudio = new Audio('./sounds/chicken_sound.mp3');
+    setMoveLeft;
     IMAGES_WALKING = {
         normal: [
             './img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
@@ -70,7 +71,7 @@ class Chicken extends MovableObject {
     }
 
     InitialStartChicken() {
-        let setMoveLeft = setInterval(() => {
+        this.setMoveLeft = setInterval(() => {
             if (this.world.startBtnIsPressed) {
                 this.moveLeft();
                 if (!this.world.checkCharacterDead() && !this.world.checkEndbossDead() && !this.world.isMuted) {
@@ -107,7 +108,7 @@ class Chicken extends MovableObject {
     }
 
     setDeadChicken() {
-        clearInterval(setMoveLeft);
+        clearInterval(this.setMoveLeft);
         this.offset.top = 35;
         this.counter++;
     }
