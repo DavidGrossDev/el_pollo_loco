@@ -104,7 +104,7 @@ class MovableObject extends DrawableObject {
     checkLastMovement() {
         let now = new Date().getTime();
         let timePassed = now - this.lastMove;
-        return timePassed / 1000 > 5;
+        return timePassed / 1000 > 0.25;
     }
 
     playAnimationOnce(images, mode = "action", effectInterval) {
