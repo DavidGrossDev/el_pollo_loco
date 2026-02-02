@@ -2,6 +2,14 @@ let canvas;
 let keyboard = new Keyboard();
 let world;
 let playCounter = 0;
+const keyMap = {
+    ArrowRight: 'RIGHT',
+    ArrowLeft: 'LEFT',
+    ArrowUp: 'UP',
+    ArrowDown: 'DOWN',
+    Space: 'SPACE',
+    KeyG: 'G'
+};
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -11,7 +19,7 @@ function init() {
     world = new World(canvas, keyboard, playCounter);
     checkMuteWorld();
     disableContextMenuForGame();
-    checkButtons();
+    initControls();
     checkPlayCounter();
 }
 
@@ -44,36 +52,24 @@ function toogleGameAudio() {
      world.toggleMute();
 }
 
-
-function checkButtons() {
-    setInputTrue();
-    setInputFalse();
+function bindButton(id, key) {
+    const btn = document.getElementById(id);
+    btn.addEventListener('pointerdown', () => {
+        keyboard[key] = true;
+    });
+    btn.addEventListener('pointerup', () => {
+        keyboard[key] = false;
+    });
+    btn.addEventListener('pointerleave', () => {
+        keyboard[key] = false;
+    });
 }
 
-function setInputTrue() {
-    ['mousedown', 'touchstart'].forEach(event =>
-        document.getElementById('btn_left').addEventListener(event, () => keyboard.LEFT = true));
-    ['mousedown', 'touchstart'].forEach(event =>
-        document.getElementById('btn_right').addEventListener(event, () => keyboard.RIGHT = true));
-    ['mousedown', 'touchstart'].forEach(event =>
-        document.getElementById('btn_jump').addEventListener(event, () => keyboard.SPACE = true));
-    ['mousedown', 'touchstart'].forEach(event =>
-        document.getElementById('btn_throw').addEventListener(event, () => keyboard.G = true));
-}
-
-function setInputFalse() {
-    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(event =>
-        document.getElementById('btn_left').addEventListener(event, () => keyboard.LEFT = false)
-    );
-    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(event =>
-        document.getElementById('btn_right').addEventListener(event, () => keyboard.RIGHT = false)
-    );
-    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(event =>
-        document.getElementById('btn_jump').addEventListener(event, () => keyboard.SPACE = false)
-    );
-    ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(event =>
-        document.getElementById('btn_throw').addEventListener(event, () => keyboard.G = false)
-    );
+function initControls() {
+    bindButton('btn_left', 'LEFT');
+    bindButton('btn_right', 'RIGHT');
+    bindButton('btn_jump', 'SPACE');
+    bindButton('btn_throw', 'G');
 }
 
 function disableContextMenuForGame() {
@@ -87,45 +83,16 @@ function disableContextMenuForGame() {
 }
 
 window.addEventListener('keydown', (ev) => {
-    if (ev.keyCode == 39) {
-        keyboard.RIGHT = true;
-    }
-    if (ev.keyCode == 37) {
-        keyboard.LEFT = true;
-    }
-    if (ev.keyCode == 38) {
-        keyboard.UP = true;
-    }
-    if (ev.keyCode == 40) {
-        keyboard.DOWN = true;
-    }
-    if (ev.keyCode == 32) {
-        keyboard.SPACE = true;
-
-    }
-    if (ev.keyCode == 71) {
-        keyboard.G = true;
+    if (keyMap[ev.code]) {
+        keyboard[keyMap[ev.code]] = true;
+        ev.preventDefault();
     }
 });
 
 window.addEventListener('keyup', (ev) => {
-    if (ev.keyCode == 39) {
-        keyboard.RIGHT = false;
-    }
-    if (ev.keyCode == 37) {
-        keyboard.LEFT = false;
-    }
-    if (ev.keyCode == 38) {
-        keyboard.UP = false;
-    }
-    if (ev.keyCode == 40) {
-        keyboard.DOWN = false;
-    }
-    if (ev.keyCode == 32) {
-        keyboard.SPACE = false;
-    }
-    if (ev.keyCode == 71) {
-        keyboard.G = false;
+    if (keyMap[ev.code]) {
+        keyboard[keyMap[ev.code]] = false;
+        ev.preventDefault();
     }
 });
 
