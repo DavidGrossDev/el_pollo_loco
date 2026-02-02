@@ -1,5 +1,17 @@
+/**
+ * @typedef {'HEALTH'|'COIN'|'BOTTLE'|'HEALTH_ENDBOSS'} StatusBarType
+ */
+
+/**
+ * StatusBar represents a UI status bar (health, coins, bottles, endboss health).
+ * @extends DrawableObject
+ */
 class StatusBar extends DrawableObject {
 
+    /**
+     * Mapping of status bar types to their image frames (6 frames each).
+     * @type {Object.<StatusBarType, string[]>}
+     */
     IMAGES = {
         HEALTH: [
             './img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png',
@@ -34,14 +46,30 @@ class StatusBar extends DrawableObject {
             './img/7_statusbars/2_statusbar_endboss/orange/orange100.png'
         ]
     };
+
+    /**
+     * Current percentage values for each status bar type.
+     * @type {Object.<StatusBarType, number>}
+     */
     percentage = {
         HEALTH: 100,
         COIN: 0,
         BOTTLE: 0,
         HEALTH_ENDBOSS: 100
     };
+
+    /**
+     * Initial percentage for this instance's type.
+     * @type {number}
+     */
     initialPercentage;
 
+    /**
+     * Create a StatusBar.
+     * @param {StatusBarType} arr - The status bar type to initialize.
+     * @param {number} x - X position on the canvas.
+     * @param {number} y - Y position on the canvas.
+     */
     constructor(arr, x, y) {
         super();
         this.loadImages(this.IMAGES.HEALTH);
@@ -56,6 +84,12 @@ class StatusBar extends DrawableObject {
         this.setPercentage(arr, this.initialPercentage);
     }
 
+    /**
+     * Set the initial percentage for a given status bar type.
+     * HEALTH and HEALTH_ENDBOSS default to 100, others to 0.
+     * @param {StatusBarType} arr
+     * @returns {void}
+     */
     setInitialPercentage(arr) {
         if (arr == 'HEALTH' || arr == 'HEALTH_ENDBOSS') {
             this.initialPercentage = 100;
@@ -64,12 +98,23 @@ class StatusBar extends DrawableObject {
         }
     }
 
+    /**
+     * Set the percentage value for the given status bar type and update the image.
+     * @param {StatusBarType} arr
+     * @param {number} percentage - New percentage (0-100).
+     * @returns {void}
+     */
     setPercentage(arr, percentage) {
         this.percentage[arr] = percentage;
         let path = this.IMAGES[arr][this.resolveImageIndex(arr)];
         this.img = this.imageCache[path];
     }
 
+    /**
+     * Resolve the correct image index (0..5) based on the current percentage for the given type.
+     * @param {StatusBarType} arr
+     * @returns {number} Image index in the frames array.
+     */
     resolveImageIndex(arr) {
         if (this.percentage[arr] >= 100) {
             return 5;

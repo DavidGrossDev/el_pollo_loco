@@ -1,3 +1,32 @@
+/**
+ * @typedef {'action'|'idle'|'jump'} MovementMode
+ */
+
+/**
+ * MovableObject extends DrawableObject and provides physics, movement, and
+ * animation helpers used by game entities (players, enemies, items, etc.).
+ *
+ * @extends DrawableObject
+ *
+ * @property {number} groundY
+ * @property {number} speed
+ * @property {boolean} otherDirection
+ * @property {number} speedY
+ * @property {number} acceleration
+ * @property {{top:number,right:number,bottom:number,left:number}} offset
+ * @property {boolean} isCollected
+ * @property {number} energy
+ * @property {number} lastHit
+ * @property {boolean} dead
+ * @property {boolean} startJumping
+ * @property {boolean} gotToLongIdle
+ * @property {number} jumpImageCounter
+ * @property {number} effectCounter
+ * @property {number} lastEffectTime
+ * @property {number} effectInterval
+ * @property {boolean} enableMovement
+ * @property {number} lastMove
+ */
 class MovableObject extends DrawableObject {
 
     groundY;
@@ -28,6 +57,11 @@ class MovableObject extends DrawableObject {
         super();
     }
 
+    /**
+	 * Apply gravity to the object, runs on a fixed interval.
+	 * @param {number} groundY - y coordinate of the ground level.
+	 * @returns {void}
+	 */
     applyGravity(groundY) {
         setInterval(() => {
             if (this.isAboveGround(groundY) || this.speedY > 0) {
@@ -40,6 +74,11 @@ class MovableObject extends DrawableObject {
         }, 1000 / 25)
     }
 
+    /**
+	 * Determine whether the object is above the ground.
+	 * @param {number} groundY
+	 * @returns {boolean}
+	 */
     isAboveGround(groundY) {
         if (this instanceof ThrowableObject) {
             return true;
@@ -48,11 +87,21 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+	 * Whether this object can be hit by the given enemy (hit cooldown).
+	 * @param {{lastHit:number}} enemy
+	 * @returns {boolean}
+	 */
     canBeHit(enemy) {
         const now = Date.now();
         return now - enemy.lastHit > 1500;
     }
 
+    /**
+	 * Axis-aligned bounding box collision check that respects offsets and facing.
+	 * @param {MovableObject} mo
+	 * @returns {boolean}
+	 */
     isColliding(mo) {
         if (!this.otherDirection) {
             return this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
@@ -68,6 +117,10 @@ class MovableObject extends DrawableObject {
         
     }
 
+    /**
+	 * Apply a hit to the object, reducing energy and updating lastHit.
+	 * @returns {void}
+	 */
     hit() {
         this.energy -= 10;
         if (this.energy < 0) {
@@ -77,24 +130,46 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+	 * Check if the object was hurt within `time` seconds.
+	 * @param {number} time - Number of seconds to consider.
+	 * @returns {boolean}
+	 */
     isHurt(time) {
         let timePassed = new Date().getTime() - this.lastHit;
         timePassed = timePassed / 1000;
         return timePassed < time;
     }
 
+    /**
+	 * Whether the object is dead (energy <= 0).
+	 * @returns {boolean}
+	 */
     isDead() {
         return this.energy <= 0;
     }
 
+    /**
+	 * Move object to the right by its speed.
+	 * @returns {void}
+	 */
     moveRight() {
         this.x += this.speed;
     }
 
+    /**
+	 * Move object to the left by its speed.
+	 * @returns {void}
+	 */
     moveLeft() {
         this.x -= this.speed;
     }
 
+    /**
+	 * Cycle image for ongoing animation.
+	 * @param {string[]} images - Array of image paths.
+	 * @returns {void}
+	 */
     playAnimation(images) {
         let i = this.currentImage % images.length;
         let path = images[i];
@@ -102,6 +177,10 @@ class MovableObject extends DrawableObject {
         this.currentImage++;
     }
 
+    /**
+	 * Reset movement timers and flags (called when movement starts).
+	 * @returns {void}
+	 */
     setMovementTime() {
         this.lastMove = new Date().getTime();
         this.gotToLongIdle = false;
@@ -109,12 +188,23 @@ class MovableObject extends DrawableObject {
         this.effectCounter = 0;
     }
 
+    /**
+	 * Check if last movement was more than 0.25s ago.
+	 * @returns {boolean}
+	 */
     checkLastMovement() {
         let now = new Date().getTime();
         let timePassed = now - this.lastMove;
         return timePassed / 1000 > 0.25;
     }
 
+    /**
+	 * Play an animation sequence once with rate limiting.
+	 * @param {string[]} images
+	 * @param {MovementMode} [mode="action"]
+	 * @param {number} [effectInterval]
+	 * @returns {void}
+	 */
     playAnimationOnce(images, mode = "action", effectInterval) {
         let now = Date.now();
         if (now - this.lastEffectTime < effectInterval) return;
@@ -129,6 +219,11 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+	 * Handle jump animation sequence.
+	 * @param {string[]} images
+	 * @returns {void}
+	 */
     animateJumping(images) {
         if (this.jumpImageCounter == images.length) {
             this.jumpImageCounter = 0;
@@ -146,6 +241,12 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+	 * Handle other short effect animations (idle/action).
+	 * @param {string[]} images
+	 * @param {string} mode
+	 * @returns {void}
+	 */
     animateEffect(images, mode) {
         if (this.effectCounter == images.length - 1) {
             if (mode === "idle") {
@@ -162,22 +263,38 @@ class MovableObject extends DrawableObject {
         }
     }
 
+    /**
+	 * Start continuous movement to the right, update facing and timers.
+	 * @returns {void}
+	 */
     startMovementRight() {
         this.moveRight();
         this.setMovementTime();
         this.otherDirection = false;
     }
 
+    /**
+	 * Start continuous movement to the left, update facing and timers.
+	 * @returns {void}
+	 */
     startMovementLeft() {
         this.moveLeft();
         this.setMovementTime();
         this.otherDirection = true;
     }
 
+    /**
+	 * Mark that a jumping animation/sequence should start.
+	 * @returns {void}
+	 */
     setJumpingVariables() {
         this.startJumping = true;
     }
 
+    /**
+	 * Initiate a jump by setting vertical speed and play sound if not muted.
+	 * @returns {void}
+	 */
     jump() {
         this.speedY = 35;
         if (!this.world.isMuted) {

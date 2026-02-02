@@ -1,3 +1,29 @@
+/**
+ * @typedef {{top:number,right:number,bottom:number,left:number}} BoxOffset
+ */
+
+/**
+ * Character (the player) handles input-driven movement, jumping, animations and sounds.
+ * @extends MovableObject
+ *
+ * @property {number} x
+ * @property {number} y
+ * @property {number} groundY
+ * @property {number} height
+ * @property {number} width
+ * @property {number} speed
+ * @property {BoxOffset} offset
+ * @property {string[]} IMAGES_WALKING
+ * @property {string[]} IMAGES_JUMPING
+ * @property {string[]} IMAGES_DYING
+ * @property {string[]} IMAGES_HURT
+ * @property {string[]} IMAGES_IDLE
+ * @property {string[]} IMAGES_LONGIDLE
+ * @property {World} world - reference to game world (set externally)
+ * @property {HTMLAudioElement} walkingAudio
+ * @property {HTMLAudioElement} jumpAudio
+ * @property {HTMLAudioElement} hurtAudio
+ */
 class Character extends MovableObject {
     x = 120;
     y = 180;
@@ -71,6 +97,9 @@ class Character extends MovableObject {
     jumpAudio = new Audio('./sounds/charjump.mp3');
     hurtAudio = new Audio('./sounds/grunt.mp3');
 
+    /**
+     * Create the playable character, preload images, apply gravity and start animations.
+     */
     constructor() {
         super().loadImage('img/2_character_pepe/2_walk/W-21.png');
         this.soundSettings();
@@ -84,6 +113,10 @@ class Character extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Configure playback rate and volume for character sounds.
+     * @returns {void}
+     */
     soundSettings() {
         this.walkingAudio.playbackRate = 3.0;
         this.walkingAudio.volume = 0.2;
@@ -92,11 +125,19 @@ class Character extends MovableObject {
         this.hurtAudio.volume = 0.1;
     }
 
+    /**
+     * Start movement and camera intervals as well as other animation loops.
+     * @returns {void}
+     */
     animate() {
         this.setCharackterMovementIntervals();
         this.setIntervalsForAnimations();
     }
 
+    /**
+     * Set an interval to read keyboard state and move the character (also handles jumping and camera).
+     * @returns {void}
+     */
     setCharackterMovementIntervals() {
         setInterval(() => {
             if (this.enableMovement && this.world.startBtnIsPressed) {
@@ -114,6 +155,10 @@ class Character extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Set animation intervals that select between dying, hurt, jumping, idle and walking animations.
+     * @returns {void}
+     */
     setIntervalsForAnimations() {
         setInterval(() => {
             if (this.isDead()) {
@@ -132,6 +177,10 @@ class Character extends MovableObject {
         }, 60);
     }
 
+    /**
+     * Play hurt sound if not muted, otherwise ensure it's paused.
+     * @returns {void}
+     */
     checkMutingForHurtSound() {
         if (!this.world.isMuted) {
             this.hurtAudio.play();
@@ -140,12 +189,20 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Play walking animation if movement keys are pressed.
+     * @returns {void}
+     */
     checkForWalking() {
         if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.startBtnIsPressed) {
             this.playAnimationWalking();
         }
     }
 
+    /**
+     * Play walking animation and sound if not muted.
+     * @returns {void}
+     */
     playAnimationWalking() {
         this.playAnimation(this.IMAGES_WALKING);
         if (!this.world.isMuted) {
@@ -153,6 +210,10 @@ class Character extends MovableObject {
         }
     }
 
+    /**
+     * Play idle or long-idle animations with appropriate timing.
+     * @returns {void}
+     */
     playAnimationIdle() {
         if (this.gotToLongIdle) {
             this.playAnimationOnce(this.IMAGES_LONGIDLE, "idle", 250);

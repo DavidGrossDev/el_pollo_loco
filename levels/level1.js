@@ -1,4 +1,15 @@
-
+/**
+ * Create and return the default Level instance used by the game.
+ *
+ * The level includes:
+ * - enemies: Chicken and Endboss instances
+ * - clouds: Cloud instances for background
+ * - backgroundObjects: BackgroundObject layers tiled across the level
+ * - coins: Coin instances placed at specific coordinates
+ * - bottles: Bottle collectibles placed randomly
+ *
+ * @returns {Level} A fully constructed Level object
+ */
 function createNewLevel() {
     return new Level(
         [

@@ -1,3 +1,19 @@
+/**
+ * @typedef {{top:number,right:number,bottom:number,left:number}} BoxOffset
+ */
+
+/**
+ * Chicken enemy: handles walking, death, and associated sounds/animations.
+ * @extends MovableObject
+ *
+ * @property {number} y
+ * @property {number} height
+ * @property {number} width
+ * @property {BoxOffset} offset
+ * @property {number} counter - used to limit death audio playback
+ * @property {HTMLAudioElement} dieAudio
+ * @property {HTMLAudioElement} walkAudio
+ */
 class Chicken extends MovableObject {
     y = 365;
     height = 60;
@@ -33,6 +49,10 @@ class Chicken extends MovableObject {
         ]
     }
 
+    /**
+     * Create a Chicken instance of given size variant.
+     * @param {'normal'|'small'} arr - Variant selects images/offsets.
+     */
     constructor(arr) {
         super();
         this.loadImages(this.IMAGES_WALKING[arr]);
@@ -44,12 +64,21 @@ class Chicken extends MovableObject {
         this.animate(arr);
     }
 
+    /**
+     * Configure audio volume and playback rate.
+     * @returns {void}
+     */
     soundSettings() {
         this.dieAudio.volume = 0.1;
         this.dieAudio.playbackRate = 3.0;
         this.walkAudio.volume = 0.01;
     }
 
+    /**
+     * Set initial image and collision offset based on variant.
+     * @param {'normal'|'small'} arr
+     * @returns {void}
+     */
     setOffset(arr) {
         if (arr === 'small') {
             this.loadImage('./img/3_enemies_chicken/chicken_small/1_walk/1_w.png');
@@ -64,12 +93,22 @@ class Chicken extends MovableObject {
         }
     }
 
+    /**
+     * Initialize movement and animation loops for this chicken.
+     * @param {'normal'|'small'} arr
+     * @returns {void}
+     */
     animate(arr) {
         this.InitialStartChicken();
         this.setChickenAnimationIntervals(arr);
 
     }
 
+    /**
+     * Start moving the chicken left when the world start button was pressed.
+     * Plays walk audio while the world is running and not muted.
+     * @returns {void}
+     */
     InitialStartChicken() {
         this.setMoveLeft = setInterval(() => {
             if (this.world.startBtnIsPressed) {
@@ -84,6 +123,11 @@ class Chicken extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Set the interval that switches between walk and dead animations and handles death audio.
+     * @param {'normal'|'small'} arr
+     * @returns {void}
+     */
     setChickenAnimationIntervals(arr) {
         setInterval(() => {
             if (this.isDead()) {
@@ -100,6 +144,10 @@ class Chicken extends MovableObject {
         }, 120);
     }
 
+    /**
+     * Stop and reset all chicken-related audio playback.
+     * @returns {void}
+     */
     stopChickenAudio() {
         this.walkAudio.pause();
         this.walkAudio.currentTime = 0;
@@ -107,6 +155,10 @@ class Chicken extends MovableObject {
         this.dieAudio.currentTime = 0;
     }
 
+    /**
+     * Finalize chicken death: stop movement interval and adjust offsets.
+     * @returns {void}
+     */
     setDeadChicken() {
         clearInterval(this.setMoveLeft);
         this.offset.top = 35;

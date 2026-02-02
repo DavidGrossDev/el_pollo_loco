@@ -1,3 +1,25 @@
+/**
+ * Endboss is the main boss enemy with alert, attack, hurt and dead states.
+ * It handles loading its images, audio settings and animation loops.
+ *
+ * @extends MovableObject
+ *
+ * @property {number} y
+ * @property {number} height
+ * @property {number} width
+ * @property {number} speed
+ * @property {{top:number,right:number,bottom:number,left:number}} offset
+ * @property {boolean} sawCharacter - whether the boss has detected the player
+ * @property {boolean} readyToAttack - whether boss is in attack range
+ * @property {World} world - reference to game world (set after instantiation)
+ * @property {HTMLAudioElement} alertAudio
+ * @property {HTMLAudioElement} burnAudio
+ * @property {string[]} IMAGES_WALKING
+ * @property {string[]} IMAGES_ARLERT
+ * @property {string[]} IMAGES_ATTACK
+ * @property {string[]} IMAGES_DEAD
+ * @property {string[]} IMAGES_HURT
+ */
 class Endboss extends MovableObject {
     y = 140;
     height = 300;
@@ -53,6 +75,10 @@ class Endboss extends MovableObject {
         './img/4_enemie_boss_chicken/4_hurt/G23.png'
     ];
 
+    /**
+     * Initialize the Endboss: load images, set starting position & energy,
+     * configure sounds and start animation loops.
+     */
     constructor() {
         super().loadImage('./img/4_enemie_boss_chicken/1_walk/G1.png');
         this.loadImages(this.IMAGES_WALKING);
@@ -66,17 +92,29 @@ class Endboss extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Configure volume and playback settings for alert and burn audio.
+     * @returns {void}
+     */
     soundSettings() {
         this.alertAudio.volume = 0.1;
         this.burnAudio.playbackRate = 2;
         this.burnAudio.volume = 0.1;
     }
 
+    /**
+     * Start the endboss reaction and animation intervals.
+     * @returns {void}
+     */
     animate() {
         this.setIntervalForReaction();
         this.setIntervalForAnimations();
     }
 
+    /**
+     * Periodically update detection and attack readiness flags based on player position.
+     * @returns {void}
+     */
     setIntervalForReaction() {
         setInterval(() => {
             if (this.inAlertRange()) {
@@ -90,6 +128,10 @@ class Endboss extends MovableObject {
         }, 200);
     }
 
+    /**
+     * Periodically select and run the correct animation based on state (dead/hurt/attack/alert).
+     * @returns {void}
+     */
     setIntervalForAnimations() {
         setInterval(() => {
             if (this.isDead()) {
@@ -105,6 +147,10 @@ class Endboss extends MovableObject {
         }, 200);
     }
 
+    /**
+     * Play the death animation once and move the boss down slightly.
+     * @returns {void}
+     */
     animationDead() {
         setInterval(() => {
             this.playAnimationOnce(this.IMAGES_DEAD);
@@ -112,6 +158,10 @@ class Endboss extends MovableObject {
         }, 80);
     }
 
+    /**
+     * Play or stop the burn audio based on world state (mute/character or endboss death).
+     * @returns {void}
+     */
     playBurnSound() {
         if (!this.world.isMuted && !this.world.checkCharacterDead() && !this.world.checkEndbossDead()) {
             this.burnAudio.play();
@@ -121,6 +171,10 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Choose between alert animation or walking depending on alertCounter.
+     * @returns {void}
+     */
     animationAlertOrWalking() {
         if (this.alertCounter < this.IMAGES_ARLERT.length - 1) {
             this.playAnimationAlert();
@@ -129,6 +183,10 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Play alert audio (if allowed) and cycle alert animation frames.
+     * @returns {void}
+     */
     playAnimationAlert() {
         if (!this.world.isMuted && !this.world.checkCharacterDead() && !this.world.checkEndbossDead()) {
             this.alertAudio.play();
@@ -140,6 +198,10 @@ class Endboss extends MovableObject {
         this.alertCounter++;
     }
 
+    /**
+     * Move and animate the boss to walk toward the character.
+     * @returns {void}
+     */
     playAnimationEndbossWalking() {
         if (this.world.character.x <= this.x) {
             this.speed = 40;
@@ -154,6 +216,10 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Play attack animation and move slightly depending on facing direction.
+     * @returns {void}
+     */
     playAnimationEndbossAttacking() {
         this.playAnimation(this.IMAGES_ATTACK);
         this.speed = 0.5;
@@ -164,10 +230,19 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Whether the boss should enter the "alert" behavior (player nearby).
+     * @returns {boolean}
+     */
     inAlertRange() {
         return this.x - this.world.character.x < 580;
     }
 
+    /**
+     * Determine whether the character is close enough to be considered in attack range.
+     * Uses offsets to compute sides and returns true if within attack proximity.
+     * @returns {boolean}
+     */
     inAttackRange() {
         const endbossLeft = this.x + this.offset.left;
         const endbossRight = this.x + this.width - this.offset.right;

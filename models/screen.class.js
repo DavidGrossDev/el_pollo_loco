@@ -1,4 +1,16 @@
+/**
+ * @typedef {'END_LOST'|'END_WIN'|'START'} ScreenType
+ */
+
+/**
+ * Screen represents intro/outro/start screens.
+ * @extends DrawableObject
+ */
 class Screen extends DrawableObject {
+    /**
+     * Image lists for each screen type.
+     * @type {Object.<ScreenType, string[]>}
+     */
     IMAGES = {
         END_LOST: [
             './img/9_intro_outro_screens/game_over/game over!.png',
@@ -32,6 +44,10 @@ class Screen extends DrawableObject {
         ]
     };
 
+    /**
+     * Create a new Screen.
+     * @param {ScreenType} arr - The screen type to display.
+     */
     constructor(arr) {
         super();
         this.x = 0;
@@ -39,6 +55,10 @@ class Screen extends DrawableObject {
         this.width = 720;
         this.height = 480;
 
+        /**
+         * Random index selected for choosing an image variant.
+         * @type {number}
+         */
         if(arr === 'END_LOST' || arr === 'END_WIN') {
             this.random = Math.round(Math.random() * 10);
         } else if (arr === 'START') {
