@@ -96,6 +96,11 @@ body {
     width: 20px;
 }
 
+button {
+    touch-action: manipulation;
+    user-select: none;
+}
+
 .startbtn {
     position: absolute;
     top: 50%;

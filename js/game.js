@@ -5,13 +5,18 @@ let playCounter = 0;
 
 function init() {
     canvas = document.getElementById('canvas');
-    
     if (world) {
         world.stopGame();
     }
     world = new World(canvas, keyboard, playCounter);
+    checkMuteWorld();
+    disableContextMenuForGame();
+    checkButtons();
+    checkPlayCounter();
+}
+
+function checkMuteWorld() {
     let localMute = JSON.parse(localStorage.getItem("audio"));
-    
     if(localMute != null) {
         if(localMute) {
             world.stopAudio(); 
@@ -19,8 +24,9 @@ function init() {
             document.getElementById('speaker_icon').src = "./img/speaker/mute.png";  
         }   
     }
-    
-    checkButtons();
+}
+
+function checkPlayCounter() {
     if (playCounter > 0) {
         document.getElementById('start_btn').classList.add('d_none');
         startGame();
@@ -68,6 +74,16 @@ function setInputFalse() {
     ['mouseup', 'mouseleave', 'touchend', 'touchcancel'].forEach(event =>
         document.getElementById('btn_throw').addEventListener(event, () => keyboard.G = false)
     );
+}
+
+function disableContextMenuForGame() {
+    const elements = document.querySelectorAll('canvas, button');
+
+    elements.forEach(el => {
+        el.addEventListener('contextmenu', e => {
+            e.preventDefault();
+        });
+    });
 }
 
 window.addEventListener('keydown', (ev) => {
