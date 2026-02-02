@@ -73,7 +73,11 @@ class Endboss extends MovableObject {
     }
 
     animate() {
+        this.setIntervalForReaction();
+        this.setIntervalForAnimations();
+    }
 
+    setIntervalForReaction() {
         setInterval(() => {
             if (this.inAlertRange()) {
                 this.sawCharacter = true;
@@ -84,13 +88,12 @@ class Endboss extends MovableObject {
                 this.readyToAttack = false;
             }
         }, 200);
+    }
 
+    setIntervalForAnimations() {
         setInterval(() => {
             if (this.isDead()) {
-                setInterval(() => {
-                    this.playAnimationOnce(this.IMAGES_DEAD);
-                    this.y += 30;
-                }, 80);
+                this.animationDead();
             } else if (this.isHurt(1)) {
                 this.playBurnSound();
                 this.playAnimation(this.IMAGES_HURT);
@@ -100,6 +103,13 @@ class Endboss extends MovableObject {
                 this.animationAlertOrWalking();
             }
         }, 200);
+    }
+
+    animationDead() {
+        setInterval(() => {
+            this.playAnimationOnce(this.IMAGES_DEAD);
+            this.y += 30;
+        }, 80);
     }
 
     playBurnSound() {
@@ -132,23 +142,26 @@ class Endboss extends MovableObject {
 
     playAnimationEndbossWalking() {
         if (this.world.character.x <= this.x) {
-            this.speed = 40;  
+            this.speed = 40;
             this.otherDirection = false;
             this.moveLeft();
             this.playAnimation(this.IMAGES_WALKING);
         } else {
             this.speed = 40;
-            this.otherDirection= true;
+            this.otherDirection = true;
             this.moveRight();
             this.playAnimation(this.IMAGES_WALKING);
         }
-
     }
 
     playAnimationEndbossAttacking() {
         this.playAnimation(this.IMAGES_ATTACK);
-        this.speed = 0.15;
-        this.moveLeft();
+        this.speed = 0.5;
+        if (!this.otherDirection) {
+            this.moveLeft();
+        } else {
+            this.moveRight();
+        }
     }
 
     inAlertRange() {
@@ -156,9 +169,19 @@ class Endboss extends MovableObject {
     }
 
     inAttackRange() {
-        let endbossX = this.x + this.offset.left;
-        let characterX = this.world.character.x + this.world.character.width - (this.world.character.offset.left + this.world.character.offset.right);
-        return endbossX - characterX < 21 && endbossX - characterX > 0;
+        const endbossLeft = this.x + this.offset.left;
+        const endbossRight = this.x + this.width - this.offset.right;
+        const characterLeft = this.world.character.x + this.world.character.offset.left;
+        const characterRight = this.world.character.x +
+            this.world.character.width -
+            this.world.character.offset.right;
+        const distance = endbossLeft - characterRight;
+        if (distance >= 0) {
+            return distance < 5;
+        } else {
+            const reverseDistance = characterLeft - endbossRight;
+            return reverseDistance < 10;
+        }
     }
 
 

@@ -20,8 +20,11 @@ body {
     z-index: 1;
     margin-top: 78px;
     height: 480px;
-    width: 720px;
+    width: 100%;
     position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,7 +63,7 @@ body {
 
 .impressum,
 .impressum>a,
-.impressum>a>img, 
+.impressum>a>img,
 .speakerbtn,
 .controlbar>div>button,
 .controlbar>div>button>img {
@@ -98,26 +101,40 @@ button {
     user-select: none;
 }
 
-.startbtn {
+.main-btns {
     position: absolute;
     top: 50%;
     left: 50%;
+    width: 200px;
     transform: translate(-50%, -50%);
-    border-radius: 6px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.main-btns>button {
     cursor: pointer;
+    color: #FFFFFF;
+    border-width: 0;
+    background-color: rgba(0, 0, 255, 0.8);
+    border-radius: 6px 12px;
     height: 25px;
     width: 110px;
-    background-color: rgba(0, 0, 255, 0.8);
-    border-width: 0;
-    color: #FFFFFF;
+    text-shadow: 0 0 4px black;
+}
+
+.main-btns>button {
     transition: width 0.125s ease-in-out;
 }
 
+.home-btn:hover,
 .startbtn:hover {
     width: 140px;
     border-radius: 12px 6px;
 }
 
+.home-btn:active,
 .startbtn:active {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
 }
@@ -138,11 +155,11 @@ button {
 }
 
 .controlbar>div:first-child {
-    padding-left: 30px;
+    padding-left: 16px;
 }
 
 .controlbar>div:last-child {
-    padding-right: 30px;
+    padding-right: 16px;
 }
 
 .controlbar>div>button {
@@ -189,33 +206,31 @@ canvas {
     display: none;
 }
 
-@media (pointer: coarse)  { 
+@media (pointer: coarse) {
     .controlbar {
         display: flex;
     }
-}
 
-@media only screen and (max-width: 932px) and (orientation: landscape){ 
+    .overlayTemplate {
+        margin: 0;
+        padding: 0;
+        height: calc(100% - 10px);
+    }
+
     .overlay {
-        width: 618px;
+        margin: 0;
+        width: 100%;
+        height: 100vh;
     }
 }
 
-@media only screen and (max-width: 882px) and (orientation: landscape){ 
-    .overlay {
-        width: 516px;
+@media only screen and (orientation: portrait) {
+    h1 {
+        display: none;
     }
-}
-
-@media only screen and (max-width: 740px) and (orientation: landscape){ 
-    .overlay {
-        width: 540px;
-    }
-}
-
-@media only screen and (max-width: 400px) and (orientation: portrait){ 
     .rotateInfo {
         display: flex;
+        padding: 0;
     }
     .startbtn {
         display: none;
@@ -223,109 +238,15 @@ canvas {
 }
 
 @media only screen and (max-width: 720px) {
+
     canvas,
     .overlay,
     .infobox {
         width: 100%;
     }
+
     .overlay {
         height: 465px;
-    }
-}
-
-@media only screen and (max-width: 674px) {
-    .overlay {
-        height: 450px;
-    }
-}
-
-@media only screen and (max-width: 652px) {
-    .overlay {
-        height: 434px;
-    }
-}
-
-@media only screen and (max-width: 626px) {
-    .overlay {
-        height: 418px;
-    }
-}
-
-@media only screen and (max-width: 605px) {
-    .overlay {
-        height: 403px;
-    }
-}
-
-@media only screen and (max-width: 580px) {
-    .overlay {
-        height: 386px;
-    }
-}
-
-@media only screen and (max-width: 533px) {
-    .overlay {
-        height: 355px;
-    }
-}
-
-@media only screen and (max-width: 556px) {
-    .overlay {
-        height: 371px;
-    }
-}
-
-@media only screen and (max-width: 532px) {
-    .overlay {
-        height: 355px;
-    }
-}
-
-@media only screen and (max-width: 508px) {
-    .overlay {
-        height: 339px;
-    }
-}
-
-@media only screen and (max-width: 485px) {
-    .overlay {
-        height: 323px;
-    }
-}
-
-@media only screen and (max-width: 462px) {
-    .overlay {
-        height: 308px;
-    }
-}
-
-@media only screen and (max-width: 440px) {
-    .overlay {
-        height: 293px;
-    }
-}
-
-@media only screen and (max-width: 416px) {
-    .overlay {
-        height: 277px;
-    }
-}
-
-@media only screen and (max-width: 393px) {
-    .overlay {
-        height: 262px;
-    }
-}
-
-@media only screen and (max-width: 368px) {
-    .overlay {
-        height: 245px;
-    }
-}
-
-@media only screen and (max-width: 344px) {
-    .overlay {
-        height: 229px;
     }
 }
 
@@ -345,6 +266,7 @@ canvas {
     h1 {
         display: none;
     }
+
     .overlay {
         margin: 0;
     }
@@ -354,6 +276,7 @@ canvas {
     canvas {
         height: 100vh;
     }
+
     .overlay {
         height: 100%;
     }

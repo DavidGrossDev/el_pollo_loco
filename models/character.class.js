@@ -9,7 +9,7 @@ class Character extends MovableObject {
         top: 120,
         right: 30,
         bottom: 10,
-        left: 18
+        left: 20
     };
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
@@ -93,6 +93,11 @@ class Character extends MovableObject {
     }
 
     animate() {
+        this.setCharackterMovementIntervals();
+        this.setIntervalsForAnimations();
+    }
+
+    setCharackterMovementIntervals() {
         setInterval(() => {
             if (this.enableMovement && this.world.startBtnIsPressed) {
                 if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -107,16 +112,14 @@ class Character extends MovableObject {
             }
             this.world.camera_x = -this.x + 120;
         }, 1000 / 60);
+    }
 
+    setIntervalsForAnimations() {
         setInterval(() => {
             if (this.isDead()) {
                 this.playAnimationOnce(this.IMAGES_DYING);
             } else if (this.isHurt(0.2)) {
-                if(!this.world.isMuted) {
-                    this.hurtAudio.play();
-                } else {
-                    this.hurtAudio.pause();
-                }
+                this.checkMutingForHurtSound();
                 this.playAnimation(this.IMAGES_HURT);
             } else if (this.startJumping || this.isAboveGround(this.groundY)) {
                 this.playAnimationOnce(this.IMAGES_JUMPING, "jump", 80);
@@ -124,16 +127,28 @@ class Character extends MovableObject {
             } else if (this.checkLastMovement()) {
                 this.playAnimationIdle();
             } else {
-                if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.startBtnIsPressed) {
-                    this.playAnimationWalking();
-                }
+                this.checkForWalking();
             }
         }, 60);
     }
 
+    checkMutingForHurtSound() {
+        if (!this.world.isMuted) {
+            this.hurtAudio.play();
+        } else {
+            this.hurtAudio.pause();
+        }
+    }
+
+    checkForWalking() {
+        if ((this.world.keyboard.RIGHT || this.world.keyboard.LEFT) && this.world.startBtnIsPressed) {
+            this.playAnimationWalking();
+        }
+    }
+
     playAnimationWalking() {
         this.playAnimation(this.IMAGES_WALKING);
-        if(!this.world.isMuted) {
+        if (!this.world.isMuted) {
             this.walkingAudio.play();
         }
     }

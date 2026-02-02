@@ -64,37 +64,51 @@ class Chicken extends MovableObject {
     }
 
     animate(arr) {
+        this.InitialStartChicken();
+        this.setChickenAnimationIntervals(arr);
+
+    }
+
+    InitialStartChicken() {
         let setMoveLeft = setInterval(() => {
             if (this.world.startBtnIsPressed) {
                 this.moveLeft();
-                if(!this.world.checkCharacterDead() && !this.world.checkEndbossDead() && !this.world.isMuted) {
+                if (!this.world.checkCharacterDead() && !this.world.checkEndbossDead() && !this.world.isMuted) {
                     this.walkAudio.play();
-                    
-                    
                 } else {
                     this.walkAudio.pause();
                     this.walkAudio.currentTime = 0;
-                } 
+                }
             }
         }, 1000 / 60);
+    }
+
+    setChickenAnimationIntervals(arr) {
         setInterval(() => {
             if (this.isDead()) {
-                if(!this.world.isMuted && this.counter < 1 && !this.world.checkCharacterDead() && !this.world.checkEndbossDead()) {
+                if (!this.world.isMuted && this.counter < 1 && !this.world.checkCharacterDead() && !this.world.checkEndbossDead()) {
                     this.dieAudio.play();
                 } else {
-                    this.walkAudio.pause();
-                    this.walkAudio.currentTime = 0;
-                    this.dieAudio.pause();
-                    this.dieAudio.currentTime = 0;
+                    this.stopChickenAudio();
                 }
                 this.playAnimation(this.IMAGE_DEAD[arr]);
-                clearInterval(setMoveLeft);
-                this.offset.top = 35;
-                this.counter++;
+                this.setDeadChicken();
             } else {
                 this.playAnimation(this.IMAGES_WALKING[arr])
             }
         }, 120);
     }
 
+    stopChickenAudio() {
+        this.walkAudio.pause();
+        this.walkAudio.currentTime = 0;
+        this.dieAudio.pause();
+        this.dieAudio.currentTime = 0;
+    }
+
+    setDeadChicken() {
+        clearInterval(setMoveLeft);
+        this.offset.top = 35;
+        this.counter++;
+    }
 }

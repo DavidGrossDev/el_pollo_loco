@@ -17,29 +17,40 @@ function init() {
         world.stopGame();
     }
     world = new World(canvas, keyboard, playCounter);
+    document.getElementById('home_btn').classList.add('d_none');
     checkMuteWorld();
     disableContextMenuForGame();
     initControls();
-    checkPlayCounter();
+    if (playCounter > 0) {
+        checkPlayCounter();
+    }
+    playCounter++;
+}
+
+function toHome() {
+    world.startBtnIsPressed = false;
+    playCounter = 0;
+    document.getElementById('start_btn').innerText = "Start Game";
+    document.getElementById('start_btn').onclick = () => {
+        startGame();
+    };
+    init();
 }
 
 function checkMuteWorld() {
     let localMute = JSON.parse(localStorage.getItem("audio"));
-    if(localMute != null) {
-        if(localMute) {
-            world.stopAudio(); 
+    if (localMute != null) {
+        if (localMute) {
+            world.stopAudio();
             world.isMuted = true;
-            document.getElementById('speaker_icon').src = "./img/speaker/mute.png";  
-        }   
+            document.getElementById('speaker_icon').src = "./img/speaker/mute.png";
+        }
     }
 }
 
 function checkPlayCounter() {
-    if (playCounter > 0) {
-        document.getElementById('start_btn').classList.add('d_none');
-        startGame();
-    }
-    playCounter++;
+    document.getElementById('start_btn').classList.add('d_none');
+    startGame();
 }
 
 function startGame() {
@@ -49,7 +60,7 @@ function startGame() {
 }
 
 function toogleGameAudio() {
-     world.toggleMute();
+    world.toggleMute();
 }
 
 function bindButton(id, key) {

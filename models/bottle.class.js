@@ -1,6 +1,5 @@
 class Bottle extends MovableObject {
 
-
     constructor() {
         if (Math.round(Math.random() * 10) % 2) {
             super().loadImage('img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
