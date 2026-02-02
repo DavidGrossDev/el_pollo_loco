@@ -140,7 +140,7 @@ class Character extends MovableObject {
 
     playAnimationIdle() {
         if (this.gotToLongIdle) {
-            this.playAnimationOnce(this.IMAGES_LONGIDLE, "idle", 300);
+            this.playAnimationOnce(this.IMAGES_LONGIDLE, "idle", 250);
         }
         this.playAnimationOnce(this.IMAGES_IDLE, "idle", 300);
     }
