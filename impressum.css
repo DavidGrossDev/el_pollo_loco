@@ -3,17 +3,28 @@
     margin: 0;
 }
 
-body {
-    background-color: bisque;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.6;
-    height: 100vh;
-    width: 100%;
+body,
+body>div {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
 }
+
+body {
+    background-color: rgb(238, 189, 130);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.6;
+    height: 100vh;
+}
+
+body>div {
+    position: relative;
+    width: 100%;
+    max-width: 1440px;
+    padding-bottom: 63px;
+}
+
 
 button {
     cursor: pointer;
@@ -24,7 +35,7 @@ button {
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    background-color: rgba(0,0,0,0.2);
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 button,
@@ -37,7 +48,7 @@ a>img {
 h1,
 h2 {
     margin-top: 1.5em;
-    text-decoration: underline 2px solid gray;
+    text-decoration: underline 2px solid rgb(188, 75, 75);
 }
 
 h2 {
@@ -45,7 +56,7 @@ h2 {
 }
 
 p {
-    max-width: 400px;
+    padding: 0 16px;
+    max-width: 600px;
     border-radius: 4px;
 }
-
