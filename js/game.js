@@ -10,10 +10,10 @@ function init() {
         world.stopGame();
     }
     world = new World(canvas, keyboard, playCounter);
-    let shit = JSON.parse(localStorage.getItem("audio"));
+    let localMute = JSON.parse(localStorage.getItem("audio"));
     
-    if(shit != null) {
-        if(shit) {
+    if(localMute != null) {
+        if(localMute) {
             world.stopAudio(); 
             world.isMuted = true;
             document.getElementById('speaker_icon').src = "./img/speaker/mute.png";  
